@@ -12,7 +12,13 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import InputAdornment from '@mui/material/InputAdornment';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 function Copyright(props) {
   return (
@@ -32,9 +38,26 @@ function Copyright(props) {
   );
 }
 
+
+const validationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required("O e-mail é obrigatório")
+    .email("E-mail inválido"),
+  password: yup.string().required("Senha é obrigatória"),
+});
+
 const defaultTheme = createTheme();
 
 const Cadastrar = () => {
+  const {
+    handleSubmit: handleSubmitForm,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
+  
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
 
@@ -124,19 +147,22 @@ const Cadastrar = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
-              />
-              <Box
-                onClick={togglePasswordVisibility}
-                sx={{
-                  cursor: "pointer",
-                  position: "absolute",
-                  top: "93%",
-                  transform: "translateY(-50%)",
-                  right: "45px",
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Box
+                        onClick={togglePasswordVisibility}
+                        sx={{
+                          cursor: "pointer",
+                        }}
+                      >
+                        {passwordVisible ? <FaEye /> : <FaEyeSlash />}
+                      </Box>
+                    </InputAdornment>
+                  ),
                 }}
-              >
-                {passwordVisible ? <FaEye  /> : <FaEyeSlash />}
-              </Box>
+              />
+               
               
               <Button
                 type="submit"
@@ -154,13 +180,9 @@ const Cadastrar = () => {
                   flexDirection: "column",
                 }}
               >
-                <Grid item xs>
-                  <Link href="#" variant="body" sx={{textDecoration: 'none' }}>
-                    Forgot password?
-                  </Link>
-                </Grid>
+                
                 <Grid item>
-                  <Link href="#" variant="body" sx={{textDecoration: 'none' }}>
+                  <Link href="/" variant="body" sx={{textDecoration: 'none' }}>
                     {"Have an account? Sign in"}
                   </Link>
                 </Grid>

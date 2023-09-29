@@ -127,7 +127,7 @@ const EmailConfirmar = () => {
               >
                 
                 <Grid item>
-                  <Link href="#" variant="body" sx={{textDecoration: 'none' }}>
+                  <Link href="/" variant="body" sx={{textDecoration: 'none' }}>
                     {"Have an account? Sign in"}
                   </Link>
                 </Grid>

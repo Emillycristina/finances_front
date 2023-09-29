@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import { InputAdornment } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useForm, Controller } from "react-hook-form";
@@ -147,6 +148,7 @@ const EsqueciSenha = () => {
                 autoComplete="current-password"
                 error={!!errors.password1}
                 helperText={errors.password1?.message}
+                
                />
              )}
             />
@@ -168,21 +170,24 @@ const EsqueciSenha = () => {
                 onChange={(e) => setPassword2(e.target.value)}
                 error={!!errors.password2}
                 helperText={errors.password2?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Box
+                        onClick={togglePasswordVisibility}
+                        sx={{
+                          cursor: "pointer",
+                        }}
+                      >
+                        {passwordVisible ? <FaEye /> : <FaEyeSlash />}
+                      </Box>
+                    </InputAdornment>
+                  ),
+                }}
                 />
                )}
               />
-               <Box
-                onClick={togglePasswordVisibility}
-                sx={{
-                  cursor: "pointer",
-                  position: "absolute",
-                  top: "82%",
-                  transform: "translateY(-50%)",
-                  right: "45px",
-                }}
-              >
-                {passwordVisible ? <FaEye  /> : <FaEyeSlash />}
-              </Box>
+             
               <Button
                 type="submit"
                 fullWidth
@@ -202,7 +207,7 @@ const EsqueciSenha = () => {
               >
                 
                 <Grid item>
-                  <Link href="#" variant="body" sx={{textDecoration: 'none' }}>
+                  <Link href="/" variant="body" sx={{textDecoration: 'none' }}>
                     {"Have an account? Sign in"}
                   </Link>
                 </Grid>
