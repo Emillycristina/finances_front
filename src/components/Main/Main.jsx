@@ -8,10 +8,9 @@ import {BsArrowUpCircle, BsArrowDownCircle} from 'react-icons/bs'
 
 const Main = () => {
   return (
-    <div >
+    <div sx={{display:'flex', alignItems:'center', justifyContent:'center', placeItens:'center'}}>
       <Header  />
-
-      <Grid container spacing={1} justifyContent="center" marginTop='-50px'>
+      <Grid container spacing={1} justifyContent="center" marginTop='-48px'>
         <Grid item>
           <Cards title='Entradas' Icon={BsArrowUpCircle} value='1000'/> 
         </Grid>
@@ -22,7 +21,6 @@ const Main = () => {
           <Cards title='Total' Icon={MdAttachMoney} value='1000' /> 
         </Grid>
       </Grid>
-      
       <Form />
     </div>
   )

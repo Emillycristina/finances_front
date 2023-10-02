@@ -24,6 +24,7 @@ const Form = () => {
               id="standard-required"
               label="Descrição"
               variant="standard"
+              sx={{width:'280px'}}
             />
           </FormControl>
         </Card>
@@ -69,7 +70,7 @@ const Form = () => {
       <Grid item>
         <Card>
           <FormControl>
-            <Button variant='contained' sx={{height:'48px'}}>Adicionar</Button>
+            <Button variant='contained' sx={{height:'48px'}}> Adicionar </Button>
           </FormControl>
         </Card>
       </Grid>
