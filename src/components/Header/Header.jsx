@@ -8,8 +8,8 @@ const Header = () => {
   
     <div >
         <Image src={Logo} alt='Logo'
-        width={170}
-        sx={{ margin: 'auto' }}
+        width={200}
+        
         />
     </div>
 

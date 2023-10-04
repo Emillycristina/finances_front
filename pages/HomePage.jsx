@@ -1,25 +1,24 @@
-import React from 'react'
-import NavBar from '../src/components/NavBar/NavBar'
-import Main from '../src/components/Main/Main'
+import React from "react";
+import NavBar from "../src/components/NavBar/NavBar";
+import Main from "../src/components/Main/Main";
 
 const HomePage = () => {
   return (
-    <div>
-    <style jsx global>{`
+    <div >
+      <style jsx global>{`
         body {
           margin: 0;
           padding: 0;
-          background-image: linear-gradient(to top, white 40%, #2e74f5);
-          background-size: cover;
-          background-position: center bottom; /* Isso ajusta o azul mais para baixo */
+          background-image: linear-gradient(to top, white 20%, #2e74f5);
+          background-size: contain; /* Alterado de 'cover' para 'contain' */
           min-height: 100vh;
+        
         }
       `}</style>
-        <NavBar/>
+      <NavBar />
       <Main />
-        
     </div>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
