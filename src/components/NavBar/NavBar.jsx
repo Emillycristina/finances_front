@@ -12,12 +12,16 @@ import { RxExit } from "react-icons/rx";
 import { BsArrowsAngleExpand, BsGraphUpArrow } from "react-icons/bs";
 import { BiSolidReport, BiSolidUserCircle } from "react-icons/bi";
 
+
 const NavBar = () => {
   const [expanded, setExpanded] = useState(false);
+  
 
   const toggleNavbar = () => {
     setExpanded(!expanded);
   };
+
+  
 
   return (
     <AppBar
@@ -53,8 +57,8 @@ const NavBar = () => {
         </ListItem>
         <ListItem sx={{ marginTop: "5rem" }}>
           <IconButton>
-            <RxExit color="white" />
-          </IconButton>
+             <RxExit color="white" />
+            </IconButton>
         </ListItem>
       </List>
       {expanded && (
