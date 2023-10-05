@@ -24,9 +24,10 @@ const Form = () => {
         container
         spacing={1}
         justifyContent="center"
-        sx={{ marginTop: "5px" }}
+        sx={{ marginTop: "7px" }}
+        
       >
-        <Grid item xs={3} sm={3} md={2}>
+        <Grid item xs={8} sm={3} md={2}>
           <Card>
             <FormControl>
               <TextField
@@ -38,7 +39,7 @@ const Form = () => {
             </FormControl>
           </Card>
         </Grid>
-        <Grid item xs={3} sm={3} md={2}>
+        <Grid item xs={8} sm={3} md={2}>
           <Card>
             <FormControl>
               <Input
@@ -64,7 +65,7 @@ const Form = () => {
                     />
                   </FormGroup>
                 </Grid>
-                <Grid item>
+                <Grid item >
                   <FormGroup>
                     <FormControlLabel
                       control={<Checkbox defaultChecked />}
@@ -76,7 +77,7 @@ const Form = () => {
             </FormControl>
           </Card>
         </Grid>
-        <Grid item>
+        <Grid item xs={4} sm={3} md={2}>
           
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                  <DatePicker
@@ -88,7 +89,7 @@ const Form = () => {
               </LocalizationProvider>
             
           </Grid>
-        <Grid item>
+        <Grid item >
           <Card>
             <FormControl>
               <Button variant="contained" sx={{ height: "52px" }}>
