@@ -1,5 +1,8 @@
 ## Finaces
 
+![Finances Logo](src/assets/Finances.png)
+
+
 Este é um aplicativo de finanças pessoais desenvolvido com Nest.js e React para ajudá-lo a gerenciar suas finanças de forma eficiente.
 
 ## Funcionalidades Principais
