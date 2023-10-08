@@ -47,6 +47,9 @@ Siga estas etapas para instalar e executar o aplicativo:
 
    ```bash
    npm run dev
+   
+Isso iniciará o servidor de desenvolvimento Vite e você poderá acessar o aplicativo em http://localhost:3000.
+
 
 
 ## Contribuindo
