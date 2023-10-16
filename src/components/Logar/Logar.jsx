@@ -21,6 +21,19 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
+const onSend = async (data) => {
+  // Verifique se todos os campos estão vazios
+  if (!data.password && !data.email) {
+    // Exibir uma mensagem de erro ou feedback ao usuário
+    alert("Preencha os dados para realizar o login");
+  } else {
+    // Executar ação de envio do formulário aqui
+    const formData = {
+      password: data.password,
+      email: data.email,
+    };
+  }
+};
 
 function Copyright(props) {
   return (
@@ -40,23 +53,30 @@ function Copyright(props) {
   );
 }
 
+const validationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required("O e-mail é obrigatório")
+    .email("E-mail inválido"),
+  password: yup.string().required("Senha é obrigatória"),
+});
+
 const defaultTheme = createTheme();
 
 const Login = () => {
+  const {
+    handleSubmit: handleSubmitForm,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
   };
 
   return (
@@ -98,47 +118,69 @@ const Login = () => {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmitForm(onSend)}
               sx={{ mt: 1 }}
             >
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
+              <Controller
                 name="email"
-                autoComplete="email"
-                autoFocus
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    error={!!errors.email}
+                    helperText={errors.email ? errors.email.message : ""}
+                  />
+                )}
               />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
+              <Controller
                 name="password"
-                label="Password"
-                id="password"
-                type={passwordVisible ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete="current-password"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Box
-                        onClick={togglePasswordVisibility}
-                        sx={{
-                          cursor: "pointer",
-                        }}
-                      >
-                        {passwordVisible ? <FaEye /> : <FaEyeSlash />}
-                      </Box>
-                    </InputAdornment>
-                  ),
-                }}
-
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    id="password"
+                    type={passwordVisible ? "text" : "password"}
+                    value={password}
+                    autoComplete="current-password"
+                    error={!!errors.password}
+                    helperText={errors.password ? errors.password.message : ""}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Box
+                            onClick={togglePasswordVisibility}
+                            sx={{
+                              cursor: "pointer",
+                            }}
+                          >
+                            {passwordVisible ? <FaEye /> : <FaEyeSlash />}
+                          </Box>
+                        </InputAdornment>
+                      ),
+                    }}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setPassword(e.target.value);
+                    }}
+                  />
+                )}
               />
-              
+
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
@@ -160,12 +202,20 @@ const Login = () => {
                 }}
               >
                 <Grid item xs>
-                  <Link href="/ConfirmEmail" variant="body" sx={{textDecoration: 'none' }}>
+                  <Link
+                    href="/ConfirmEmail"
+                    variant="body"
+                    sx={{ textDecoration: "none" }}
+                  >
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="/SignUp" variant="body" sx={{textDecoration: 'none' }}>
+                  <Link
+                    href="/SignUp"
+                    variant="body"
+                    sx={{ textDecoration: "none" }}
+                  >
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

@@ -9,7 +9,7 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
-  CardContent,
+  
 } from "@mui/material";
 import React from "react";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -93,7 +93,7 @@ const Form = () => {
           <Card>
             <FormControl>
               <Button variant="contained" sx={{ height: "52px" }}>
-                {" "}
+                
                 Adicionar{" "}
               </Button>
             </FormControl>

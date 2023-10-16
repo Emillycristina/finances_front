@@ -53,12 +53,24 @@ function Copyright(props) {
   );
 }
 
+const onSubmit = async (data) => {
 
+  // Verifique se todos os campos estão vazios
+  if (!data.password2 && !data.password1  && data.password1 !== data.password2) {
+    // Exibir uma mensagem de erro ou feedback ao usuário
+    setError("form", {
+      type: "manual",
+      message: "Preencha os campos corretamente!",
+    });
+  } else {
+    // Executar ação de envio do formulário aqui
+    const formData = {
+     password2: data.password2,
+      
+    };
+  }
+}
 
-const onSubmit = (data) => {
-  console.log(data);
-  //  Dados para validação no backend aqui
-};
 
 
 const defaultTheme = createTheme();
@@ -75,7 +87,7 @@ const EsqueciSenha = () => {
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
-  
+  const [passwordVisible2, setPasswordVisible2] = useState(false);
   
   
   const togglePasswordVisibility = () => {
@@ -84,7 +96,10 @@ const EsqueciSenha = () => {
   
 
   
-
+  const togglePasswordVisibility2 = () => {
+    setPasswordVisible2(!passwordVisible2);
+  };
+  
   
 
   return (
@@ -142,13 +157,29 @@ const EsqueciSenha = () => {
                 fullWidth
                 name="password1"
                 label="Password"
-                type="password"
+                type={passwordVisible2 ? "text" : "password"}
                 value={password1}
-                onChange={(e) => setPassword1(e.target.value)}
                 autoComplete="current-password"
                 error={!!errors.password1}
-                helperText={errors.password1?.message}
-                
+                helperText={errors.password1? errors.password1.message : ""}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Box
+                        onClick={togglePasswordVisibility2}
+                        sx={{
+                          cursor: "pointer",
+                        }}
+                      >
+                        {passwordVisible2 ? <FaEye /> : <FaEyeSlash />}
+                      </Box>
+                    </InputAdornment>
+                  ),
+                }}
+                onChange={(e) => {
+                  field.onChange(e); 
+                  setPassword1(e.target.value); 
+                }}
                />
              )}
             />
@@ -167,9 +198,8 @@ const EsqueciSenha = () => {
                 value={password2}
                 type={passwordVisible ? "text" : "password"}
                 autoComplete="current-password"
-                onChange={(e) => setPassword2(e.target.value)}
                 error={!!errors.password2}
-                helperText={errors.password2?.message}
+                helperText={errors.password2? errors.password2.message : ""}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -183,7 +213,11 @@ const EsqueciSenha = () => {
                       </Box>
                     </InputAdornment>
                   ),
-                }}
+                   }}
+                   onChange={(e) => {
+                    field.onChange(e); 
+                    setPassword2(e.target.value); 
+                  }}
                 />
                )}
               />

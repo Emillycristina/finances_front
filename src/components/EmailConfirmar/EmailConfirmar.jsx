@@ -4,7 +4,7 @@ import Link from "@mui/material/Link";
 import Logo from "../../assets/Finances.png";
 
 
-import * as yup from 'yup';
+
 
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -15,9 +15,44 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 
 
+
+
+
+const onSubmit = async (data) => {
+
+    
+  if (!data.email) {
+    // Exibir uma mensagem de erro ou feedback ao usuário
+    setError("form", {
+      type: "manual",
+      message: "Preencha  o campo corretamente!",
+    });
+  } else {
+    // Executar ação de envio do formulário aqui
+    const formData = {
+       email: data.email,
+    };
+
+  }
+}
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .required("O e-mail é obrigatório")
+    .email("E-mail inválido")
+    .test("format", "O e-mail deve ser no formato padrão", (value) => {
+      return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value);
+    }),
+ 
+  
+});
 
 
 
@@ -40,20 +75,21 @@ function Copyright(props) {
   );
 }
 
+
 const defaultTheme = createTheme();
 
 const EmailConfirmar = () => {
+  const {
+    handleSubmit: handleSubmitForm,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
   
-  
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
 
+  
+  
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh", minHeight: 400 }}>
@@ -93,10 +129,16 @@ const EmailConfirmar = () => {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmitForm(onSubmit)}
               sx={{ mt: 1 }}
             >
+            <Controller
+                name="email"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
             <TextField
+            {...field}
                 margin="normal"
                 required
                 fullWidth
@@ -105,8 +147,11 @@ const EmailConfirmar = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                error={!!errors.email}
+                helperText={errors.email ? errors.email.message : ""}
+                 />
+                )}
               />
-            
             
              
               <Button

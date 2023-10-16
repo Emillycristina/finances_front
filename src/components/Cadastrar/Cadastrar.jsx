@@ -39,18 +39,24 @@ function Copyright(props) {
 }
 
 
-const validationSchema = yup.object().shape({
+const schema = yup.object().shape({
   name: yup
     .string()
-    .required('Nome é obrigatório!')
-    .min(5, 'Nome precisa ter no mínimo 5 caracteres!'),
- email: yup
+    .required("O nome é obrigatório")
+    .min(5, "O nome deve ter 5 cacteres ou mais")
+    .max(25, "O nome deve ter no máximo 20 caracteres"),
+  email: yup
     .string()
     .required("O e-mail é obrigatório")
-    .email("E-mail inválido"),
+    .email("E-mail inválido")
+    .test("format", "O e-mail deve ser no formato padrão", (value) => {
+      return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value);
+    }),
   password: yup
-  .string()
-  .required("Senha é obrigatória"),
+    .string()
+    .min(8, "A senha deve ter pelo menos 8 caracteres")
+    .required("Senha é obrigatória"),
+  
 });
 
 const defaultTheme = createTheme();
@@ -61,7 +67,7 @@ const Cadastrar = () => {
     control,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(schema),
   });
   
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -71,14 +77,25 @@ const Cadastrar = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+  const onSubmit = async (data) => {
+
+    
+    if (!data.name && !data.password && !data.email) {
+      // Exibir uma mensagem de erro ou feedback ao usuário
+      setError("form", {
+        type: "manual",
+        message: "Preencha todos os campos corretamente!",
+      });
+    } else {
+      // Executar ação de envio do formulário aqui
+      const formData = {
+        name: data.name,
+        password: data.password,
+        email: data.email,
+      };
+
+    }
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -119,10 +136,16 @@ const Cadastrar = () => {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmitForm(onSubmit)}
               sx={{ mt: 1 }}
             >
-           <TextField
+            <Controller
+                name="name"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+             <TextField
+             {...field}
                 margin="normal"
                 required
                 fullWidth
@@ -131,8 +154,18 @@ const Cadastrar = () => {
                 name="name"
                 autoComplete="name"
                 autoFocus
+                error={!!errors.name}
+                helperText={errors.name ? errors.name.message : ""}
+                />
+                )}
               />
+            <Controller
+              name="email"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
               <TextField
+              {...field}
                 margin="normal"
                 required
                 fullWidth
@@ -141,8 +174,18 @@ const Cadastrar = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                error={!!errors.email}
+                helperText={errors.email ? errors.email.message : ""}
+                />
+                )}
               />
+              <Controller
+              name="password"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
               <TextField
+              {...field}
                 margin="normal"
                 required
                 fullWidth
@@ -153,6 +196,8 @@ const Cadastrar = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
+                error={!!errors.name}
+                helperText={errors.name ? errors.name.message : ""}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -168,7 +213,8 @@ const Cadastrar = () => {
                   ),
                 }}
               />
-               
+              )}
+              />
               
               <Button
                 type="submit"
@@ -202,4 +248,4 @@ const Cadastrar = () => {
   );
 };
 
-export default Cadastrar;
+export default Cadastrar
