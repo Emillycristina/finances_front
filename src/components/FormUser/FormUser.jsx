@@ -97,6 +97,8 @@ export const FormUser = () => {
       sx={{
         "& .MuiTextField-root": { m: 1, width: "25ch" },
         marginTop: "30px",
+        marginLeft:"50px",
+       
       }}
     >
       <Avatar
@@ -135,19 +137,21 @@ export const FormUser = () => {
       <Box>
         <TextField
           label="Nome Completo"
-          variant="standard"
+          variant="outlined"
           type="text"
+          size="small"
         ></TextField>
 
-        <TextField label="E-mail" variant="standard" type="text"></TextField>
+        <TextField label="E-mail" variant="outlined" type="text" size="small"></TextField>
 
-        <TextField label="Telefone" variant="standard" type="text"></TextField>
+        <TextField label="Telefone" variant="outlined" type="text" size="small"></TextField>
 
         <TextField label="CEP" 
-        variant="standard" 
+        variant="outlined" 
         value={cep}
         onChange={handleCepChange}
-        type="text">
+        type="text"
+        size="small">
         
         </TextField>
 
@@ -156,21 +160,24 @@ export const FormUser = () => {
         <TextField
           label="Logradouro"
           value={endereco.logradouro}
-          variant="standard"
+          variant="outlined"
           type="text"
+          size="small"
         ></TextField>
 
         <TextField label="Bairro" 
-        variant="standard" 
+        variant="outlined" 
+        size="small"
         value={endereco.bairro}
         type="text"></TextField>
 
         <TextField label="Cidade" 
-        variant="standard" 
+        variant="outlined" 
+        size="small"
         value={endereco.cidade}
         type="text"></TextField>
 
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+        <FormControl variant="outlined" sx={{ m: 1, minWidth: 200 }}  size="small">
           <InputLabel id="demo-simple-select-standard-label">UF</InputLabel>
           <Select
             value={estadoSelecionado}

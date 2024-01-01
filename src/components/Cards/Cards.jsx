@@ -4,7 +4,15 @@ import { Card, CardContent, Box, Typography } from '@mui/material';
 const Cards = ({title,Icon, value}) => {
   return (
     <div>
-        <Card sx={{width:'20rem', height:'10rem', backgroundColor: 'rgb(255, 255, 255,0.8)'}}>
+        <Card 
+        sx={{
+         background: "rgba( 255, 255, 255, 0.7)",
+         height:'90px',
+         width: '200px',
+         marginTop:'10px',
+         padding:'10px',
+         border: 'none',
+         }}> 
             <CardContent>
             <Box display="flex" alignItems="center">
               {Icon && <Icon size={25} color='#2e74f5' />}

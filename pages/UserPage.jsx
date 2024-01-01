@@ -10,8 +10,8 @@ const UserPage = () => {
         body {
           margin: 0;
           padding: 0;
-          background-image: linear-gradient(to top, white 70%, #2e74f5);
-          background-size: contain; /* Alterado de 'cover' para 'contain' */
+          background-color: rgb(244, 247, 248);
+          background: contain; /* Alterado de 'cover' para 'contain' */
           min-height: 100vh;
         
         }

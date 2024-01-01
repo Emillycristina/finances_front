@@ -1,16 +1,16 @@
 import Image from 'next/image'
 import React from 'react'
-import Logo from '../../assets/Finances.png'
+import Logo from '../../assets/LogoTexto.png'
 
 const Header = () => {
   return (
 
   
-    <div >
-        <Image src={Logo} alt='Logo'
-        width={200}
+    <div style={{ display:'flex', justifyContent:'center',alignItems:'center', margin:'0 auto', marginTop:'3px'}}>
+      <div>
+        <Image src={Logo} alt='logoTexto' width={200}></Image>
         
-        />
+        </div>
     </div>
 
   )

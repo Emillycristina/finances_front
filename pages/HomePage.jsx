@@ -1,23 +1,29 @@
 import React from "react";
 import NavBar from "../src/components/NavBar/NavBar";
 import Main from "../src/components/Main/Main";
+import Image from "next/image";
+import { FormProvider } from '../src/js/FormContext';
 
 const HomePage = () => {
   return (
+  <FormProvider>
     <div >
       <style jsx global>{`
         body {
           margin: 0;
           padding: 0;
-          background-image: linear-gradient(to top, white 20%, #2e74f5);
-          background-size: contain; /* Alterado de 'cover' para 'contain' */
+          background-color: rgb(244, 247, 248);
+          background-size: cover; 
+          background-repeat: no-repeat;
           min-height: 100vh;
+          
         
         }
       `}</style>
       <NavBar />
       <Main />
     </div>
+  </FormProvider>
   );
 };
 
