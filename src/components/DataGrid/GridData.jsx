@@ -18,7 +18,7 @@ const GridData = () => {
       field: 'actions',
       headerName: 'Ações',
       sortable: false,
-      width: 120,
+      width: 60,
       renderCell: (params) => (
         <>
           <FaEdit style={{ cursor: 'pointer', color:'#2e74f5' }} onClick={() => handleEdit(params.row.id)} />
@@ -66,7 +66,7 @@ const GridData = () => {
 
   
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 250, width: '70%', marginTop: '20px', margin: '0 auto' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 250, width: '70%', margin: '0 auto' , padding: '15px'}}>
       <DataGrid
         rows={manualData}
         columns={columns}
@@ -75,7 +75,7 @@ const GridData = () => {
         }}
         localeText={localeText}
         autoHeight
-        sx={{background: 'rgb(255, 255, 255)'}}
+        sx={() => ({ background: 'rgb(255, 255, 255)' })}
       />
     </div>
   );

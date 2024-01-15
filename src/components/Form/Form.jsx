@@ -87,7 +87,7 @@ const Form = () => {
         border:'solid 0.5px #e5e5e7', 
         width:'70%', 
         borderRadius:'4px', 
-        paddingBottom:'3px' }}
+        paddingBottom:'5px' }}
       >
         <Grid item xs={8} sm={3} md={2}>
           <FormControl>

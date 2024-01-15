@@ -51,7 +51,7 @@ const NavBar = () => {
         alignItems: "center",
         borderRadius: "0 7px 7px 0 ",
         marginRight: "10px",
-        padding: 0,
+        padding: 2,
         left: 0
       }}
     >
