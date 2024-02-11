@@ -39,6 +39,8 @@ function Copyright(props) {
 }
 
 
+
+
 const schema = yup.object().shape({
   name: yup
     .string()
@@ -79,21 +81,41 @@ const Cadastrar = () => {
 
   const onSubmit = async (data) => {
 
+    try {
+      const isValid = await handleSubmitForm(() => {})();
+
+      if (!isValid) {
+        setErrorMessage("Preencha todos os campos corretamente!");
+        return;
+      } 
+      
     
-    if (!data.name && !data.password && !data.email) {
-      // Exibir uma mensagem de erro ou feedback ao usuário
-      setError("form", {
-        type: "manual",
-        message: "Preencha todos os campos corretamente!",
-      });
-    } else {
-      // Executar ação de envio do formulário aqui
       const formData = {
         name: data.name,
         password: data.password,
         email: data.email,
+       
       };
+     
+      const response = await fetch('https://apifinances.onrender.com/users', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
+      console.log('Status da resposta:', response.status);
+
+      if (!response.ok) {
+        throw new Error(`Erro ao enviar dados: ${response.statusText}`);
+      }
+
+      console.log('Usuário cadastrado com sucesso!', await response.json());
+     }catch (error) {
+      console.error('Erro durante a requisição:', error);
+      setErrorMessage("Erro ao enviar dados");
     }
   }
 
@@ -222,7 +244,7 @@ const Cadastrar = () => {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Sign Up
               </Button>
               <Grid
                 container

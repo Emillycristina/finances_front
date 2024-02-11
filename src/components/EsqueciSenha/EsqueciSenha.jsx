@@ -16,11 +16,16 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from 'yup';
-
-
+import * as yup from "yup";
 
 const validationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required("O e-mail é obrigatório")
+    .email("E-mail inválido")
+    .test("format", "O e-mail deve ser no formato padrão", (value) => {
+      return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value);
+    }),
   password1: yup
     .string()
     .required("Senha é obrigatória")
@@ -54,24 +59,41 @@ function Copyright(props) {
 }
 
 const onSubmit = async (data) => {
-
-  // Verifique se todos os campos estão vazios
-  if (!data.password2 && !data.password1  && data.password1 !== data.password2) {
-    // Exibir uma mensagem de erro ou feedback ao usuário
+  
+  if (!data.password2 && !data.password1 && data.password1 !== data.password2) {
+    
     setError("form", {
       type: "manual",
       message: "Preencha os campos corretamente!",
     });
   } else {
-    // Executar ação de envio do formulário aqui
+    
     const formData = {
-     password2: data.password2,
-      
+      password2: data.password2,
+      email: data.email
     };
+
+    try {
+      const response = await fetch(
+        "https://apifinances.onrender.com/users/updateSenha",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(`Erro ao salvar nova senha: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error("Erro ao salvar nova senha", error.message);
+    }
   }
-}
-
-
+};
 
 const defaultTheme = createTheme();
 
@@ -79,7 +101,7 @@ const EsqueciSenha = () => {
   const {
     handleSubmit: handleSubmitForm,
     control,
-    formState:{ errors },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
   });
@@ -89,18 +111,14 @@ const EsqueciSenha = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passwordVisible2, setPasswordVisible2] = useState(false);
   
-  
+
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
-  
 
-  
   const togglePasswordVisibility2 = () => {
     setPasswordVisible2(!passwordVisible2);
   };
-  
-  
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -135,10 +153,10 @@ const EsqueciSenha = () => {
           >
             <Image src={Logo} alt="logo" width={250} height={250} />
 
-            <Typography  sx={{ color: "#6aa5f1" }}>
-              Confirm new password:
+            <Typography sx={{ color: "#6aa5f1" }}>
+              Confirm e-mail and new password:
             </Typography>
-            
+
             <Box
               component="form"
               noValidate
@@ -146,82 +164,106 @@ const EsqueciSenha = () => {
               onSubmit={handleSubmitForm(onSubmit)}
             >
               <Controller
-                name="password1"
+                name="email"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
-              <TextField
-              {...field}
-                margin="normal"
-                required
-                fullWidth
-                name="password1"
-                label="Password"
-                type={passwordVisible2 ? "text" : "password"}
-                value={password1}
-                autoComplete="current-password"
-                error={!!errors.password1}
-                helperText={errors.password1? errors.password1.message : ""}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Box
-                        onClick={togglePasswordVisibility2}
-                        sx={{
-                          cursor: "pointer",
-                        }}
-                      >
-                        {passwordVisible2 ? <FaEye /> : <FaEyeSlash />}
-                      </Box>
-                    </InputAdornment>
-                  ),
-                }}
-                onChange={(e) => {
-                  field.onChange(e); 
-                  setPassword1(e.target.value); 
-                }}
-               />
-             )}
-            />
-            <Controller
-                name="password2"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-             <TextField
-               {...field}
-                margin="normal"
-                required
-                fullWidth
-                name="password2"
-                label=" Confirm Password"
-                value={password2}
-                type={passwordVisible ? "text" : "password"}
-                autoComplete="current-password"
-                error={!!errors.password2}
-                helperText={errors.password2? errors.password2.message : ""}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Box
-                        onClick={togglePasswordVisibility}
-                        sx={{
-                          cursor: "pointer",
-                        }}
-                      >
-                        {passwordVisible ? <FaEye /> : <FaEyeSlash />}
-                      </Box>
-                    </InputAdornment>
-                  ),
-                   }}
-                   onChange={(e) => {
-                    field.onChange(e); 
-                    setPassword2(e.target.value); 
-                  }}
-                />
-               )}
+                  <TextField
+                    {...field}
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    error={!!errors.email}
+                    helperText={errors.email ? errors.email.message : ""}
+                  />
+                )}
               />
-             
+              <Controller
+                name="password1"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password1"
+                    label="Password"
+                    type={passwordVisible2 ? "text" : "password"}
+                    value={password1}
+                    autoComplete="current-password"
+                    error={!!errors.password1}
+                    helperText={
+                      errors.password1 ? errors.password1.message : ""
+                    }
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Box
+                            onClick={togglePasswordVisibility2}
+                            sx={{
+                              cursor: "pointer",
+                            }}
+                          >
+                            {passwordVisible2 ? <FaEye /> : <FaEyeSlash />}
+                          </Box>
+                        </InputAdornment>
+                      ),
+                    }}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setPassword1(e.target.value);
+                    }}
+                  />
+                )}
+              />
+              <Controller
+                name="password2"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password2"
+                    label=" Confirm Password"
+                    value={password2}
+                    type={passwordVisible ? "text" : "password"}
+                    autoComplete="current-password"
+                    error={!!errors.password2}
+                    helperText={
+                      errors.password2 ? errors.password2.message : ""
+                    }
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Box
+                            onClick={togglePasswordVisibility}
+                            sx={{
+                              cursor: "pointer",
+                            }}
+                          >
+                            {passwordVisible ? <FaEye /> : <FaEyeSlash />}
+                          </Box>
+                        </InputAdornment>
+                      ),
+                    }}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setPassword2(e.target.value);
+                    }}
+                  />
+                )}
+              />
+
               <Button
                 type="submit"
                 fullWidth
@@ -230,7 +272,7 @@ const EsqueciSenha = () => {
               >
                 Send Password
               </Button>
-            
+
               <Grid
                 container
                 sx={{
@@ -239,9 +281,8 @@ const EsqueciSenha = () => {
                   flexDirection: "column",
                 }}
               >
-                
                 <Grid item>
-                  <Link href="/" variant="body" sx={{textDecoration: 'none' }}>
+                  <Link href="/" variant="body" sx={{ textDecoration: "none" }}>
                     {"Have an account? Sign in"}
                   </Link>
                 </Grid>
@@ -251,7 +292,6 @@ const EsqueciSenha = () => {
           </Box>
         </Grid>
       </Grid>
-      
     </ThemeProvider>
   );
 };

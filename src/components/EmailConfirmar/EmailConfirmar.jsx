@@ -3,9 +3,6 @@ import React, { useState } from "react";
 import Link from "@mui/material/Link";
 import Logo from "../../assets/Finances.png";
 
-
-
-
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -28,17 +25,37 @@ const onSubmit = async (data) => {
 
     
   if (!data.email) {
-    // Exibir uma mensagem de erro ou feedback ao usuário
+    
     setError("form", {
       type: "manual",
       message: "Preencha  o campo corretamente!",
     });
   } else {
-    // Executar ação de envio do formulário aqui
+    
     const formData = {
        email: data.email,
     };
-
+    try {
+      const response = await fetch('https://apifinances.onrender.com/sendPasswordResetEmail', {
+        method:'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      if (!response.ok) {
+        
+        const errorMessage = await response.text();
+        throw new Error(`Erro ao enviar e-mail: ${errorMessage}`);
+      }
+      }catch (error) {
+      
+        console.error('Erro ao enviar e-mail:', error.message);
+      }
+    
+     
   }
 }
 

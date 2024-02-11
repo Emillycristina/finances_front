@@ -47,7 +47,7 @@ const Form = () => {
   const handleSubmit = async () => {
     try {
       // Faça a chamada à API para enviar os dados
-      const response = await fetch('sua-url-da-api', {
+      const response = await fetch('api', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

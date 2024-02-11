@@ -32,6 +32,33 @@ const onSend = async (data) => {
       password: data.password,
       email: data.email,
     };
+    try {
+      const response = await fetch('https://apifinances.onrender.com/sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        
+        const errorMessage = await response.text();
+        throw new Error(`Erro ao autenticar: ${errorMessage}`);
+      }
+
+      // A autenticação foi bem-sucedida - pode manipular a resposta aqui
+      const responseData = await response.json();
+      console.log('Usuário autenticado:', responseData);
+
+      
+      history.push('/HomePage'); 
+
+    } catch (error) {
+      
+      console.error('Erro durante a autenticação:', error.message);
+    }
   }
 };
 
