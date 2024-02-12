@@ -108,7 +108,7 @@ const Cadastrar = () => {
       console.log('Status da resposta:', response.status);
 
       if (!response.ok) {
-        throw new Error(`Erro ao enviar dados: ${response.statusText}`);
+        console.log(`Erro ao enviar dados: ${response.statusText}`);
       }
 
       console.log('Usuário cadastrado com sucesso!', await response.json());
