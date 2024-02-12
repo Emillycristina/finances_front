@@ -242,6 +242,7 @@ const Cadastrar = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
+                onClick={handleSubmit(onSubmit)}
                 sx={{ mt: 3, mb: 2 }}
               >
                 Sign Up
