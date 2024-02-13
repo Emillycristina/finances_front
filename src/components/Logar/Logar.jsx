@@ -35,6 +35,9 @@ const onSend = async (data) => {
     try {
       const response = await fetch('https://apifinances.onrender.com/sessions', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(formData),
       });
 
