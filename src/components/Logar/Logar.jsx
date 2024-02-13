@@ -34,11 +34,11 @@ const onSend = async (data) => {
     };
     try {
       const response = await fetch('https://apifinances.onrender.com/sessions', {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        //body: JSON.stringify(formData),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
@@ -56,6 +56,8 @@ const onSend = async (data) => {
 
     } catch (error) {
       
+      console.error('Response status:', response.status);
+      console.error('Response message:', response.statusText);
       console.error('Erro durante a autenticação:', error.message);
     }
   }
