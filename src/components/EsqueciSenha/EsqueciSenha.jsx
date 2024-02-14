@@ -82,6 +82,7 @@ const onSubmit = async (data) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(formData),
+          credentials: 'include',
         }
       );
 

@@ -99,11 +99,11 @@ const Cadastrar = () => {
      
       const response = await fetch('https://apifinances.onrender.com/users', {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
+        credentials: 'include',
       });
 
       console.log('Status da resposta:', response.status);

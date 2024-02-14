@@ -43,6 +43,7 @@ const onSubmit = async (data) => {
         
         },
         body: JSON.stringify(formData),
+        credentials: 'include',
       });
       
       if (!response.ok) {
