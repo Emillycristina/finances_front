@@ -32,6 +32,7 @@ const onSend = async (data) => {
       password: data.password,
       email: data.email,
     };
+    console.log('Request Data:', formData);
     try {
       const response = await fetch('https://apifinances.onrender.com/sessions', {
         method: 'POST',
