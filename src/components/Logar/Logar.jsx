@@ -50,8 +50,8 @@ const onSend = async (data) => {
         const errorMessage = await response.text();
         throw new Error(`Erro ao autenticar: ${errorMessage}`);
       }
-
-      await toast.promise(
+       console.log('deu certo!')
+      /* await toast.promise(
         Promise.resolve(), //  Promise resolvida para representar sucesso
         {
           pending: 'Realizando login...', // Mensagem enquanto a Promise está pendente
@@ -62,7 +62,7 @@ const onSend = async (data) => {
       );
   
       // Restante do seu código após o login bem-sucedido
-      return history.push('/HomePage');
+      return history.push('/HomePage'); */
     } catch (error) {
       // toast.promise para tratar erro
       await toast.promise(
