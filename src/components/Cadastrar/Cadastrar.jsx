@@ -75,7 +75,7 @@ const Cadastrar = () => {
   });
   
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [password, setPassword] = useState("");
+
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -84,7 +84,7 @@ const Cadastrar = () => {
   const onSubmit = async (data) => {
 
     try {
-      const isValid = await handleSubmitForm(onSubmit)();
+      const isValid = await handleSubmitForm(data =>{})();
 
       if (!isValid) {
         setErrorMessage("Preencha todos os campos corretamente!");
@@ -255,8 +255,8 @@ const Cadastrar = () => {
                 }}
                 value={field.value}  
                 onChange={(e) => field.onChange(e.target.value)}
-              />
-              )}
+                />
+               )}
               />
               
               <Button
