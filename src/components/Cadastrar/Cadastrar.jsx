@@ -188,7 +188,6 @@ const Cadastrar = () => {
             <Controller
                 name="name"
                 control={control}
-                defaultValue=""
                 render={({ field }) => (
              <TextField
              {...field}
@@ -208,7 +207,6 @@ const Cadastrar = () => {
             <Controller
               name="email"
               control={control}
-              defaultValue=""
               render={({ field }) => (
               <TextField
               {...field}
@@ -228,7 +226,6 @@ const Cadastrar = () => {
               <Controller
               name="password"
               control={control}
-              defaultValue=""
               render={({ field }) => (
               <TextField
               {...field}
@@ -239,8 +236,6 @@ const Cadastrar = () => {
                 label="Password"
                 id="password"
                 type={passwordVisible ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
                 error={!!errors.name}
                 helperText={errors.name ? errors.name.message : ""}
@@ -258,6 +253,8 @@ const Cadastrar = () => {
                     </InputAdornment>
                   ),
                 }}
+                value={field.value}  
+                onChange={(e) => field.onChange(e.target.value)}
               />
               )}
               />
