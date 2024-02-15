@@ -82,9 +82,11 @@ const Cadastrar = () => {
   };
 
   const onSubmit = async (data) => {
+    console.log('Início da função onSubmit');
 
     try {
-      const isValid = await handleSubmitForm((data) => {})(data);
+      const isValid = await handleSubmitForm();
+      console.log('Após a execução de handleSubmitForm');
 
       if (!isValid ) {
         toast.error("Preencha todos os campos corretamente!", {
@@ -95,7 +97,7 @@ const Cadastrar = () => {
         return;
       } 
       
-    
+      console.log('Formulário válido');
       const formData = {
         name: data.name,
         password: data.password,
