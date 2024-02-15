@@ -82,7 +82,7 @@ const Cadastrar = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log('Início da função onSubmit');
+    console.log('Dados do formulário:', data);
 
     try {
       const isValid = await handleSubmitForm();
