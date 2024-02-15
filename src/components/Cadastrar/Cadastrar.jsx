@@ -84,7 +84,7 @@ const Cadastrar = () => {
   const onSubmit = async (data) => {
 
     try {
-      const isValid = await handleSubmitForm(() => {})();
+      const isValid = await handleSubmitForm(onSubmit)();
 
       if (!isValid) {
         setErrorMessage("Preencha todos os campos corretamente!");
