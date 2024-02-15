@@ -50,26 +50,26 @@ const onSend = async (data) => {
         const errorMessage = await response.text();
         throw new Error(`Erro ao autenticar: ${errorMessage}`);
       }
-       console.log('deu certo!')
-      /* await toast.promise(
+
+      await toast.promise(
         Promise.resolve(), //  Promise resolvida para representar sucesso
         {
-          pending: 'Realizando login...', // Mensagem enquanto a Promise está pendente
-          success: 'Login bem-sucedido!', // Mensagem quando a Promise é resolvida com sucesso
+          pending: 'Realizando login... 🕛 ', // Mensagem enquanto a Promise está pendente
+          success: 'Seja Bem-Vindo(a)! 😃 ', // Mensagem quando a Promise é resolvida com sucesso
           position: 'top-center',
           autoClose: 3000,
         }
       );
   
       // Restante do seu código após o login bem-sucedido
-      return history.push('/HomePage'); */
+      return history.push('/HomePage');
     } catch (error) {
       // toast.promise para tratar erro
       await toast.promise(
         Promise.reject(), //  Promise rejeitada para representar erro
         {
-          pending: 'Realizando login...', // Mensagem enquanto a Promise está pendente
-          error: `Erro durante a autenticação: ${error.message}`, 
+          pending: 'Realizando login... 🕛', // Mensagem enquanto a Promise está pendente
+          error: `Erro durante a autenticação: ${error.message} 😔`, 
           position: 'top-center',
           autoClose: 3000,
         }
