@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Link from "@mui/material/Link";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
@@ -21,70 +21,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-
-
-
-const onSend = async (data) => {
-  const router = useRouter();
-  
-  // Verifique se todos os campos estão vazios
-  if (!data.password && !data.email) {
-    // Exibir uma mensagem de erro ou feedback ao usuário
-    alert("Preencha os dados para realizar o login");
-  } else {
-    // Executar ação de envio do formulário aqui
-    const formData = {
-      password: data.password,
-      email: data.email,
-    };
-    console.log('Request Data:', formData);
-    try {
-      const response = await fetch('https://apifinances.onrender.com/sessions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData),
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        
-        const errorMessage = await response.text();
-        throw new Error(`Erro ao autenticar: ${errorMessage}`);
-      }
-
-      await toast.promise(
-        Promise.resolve(), //  Promise resolvida para representar sucesso
-        {
-          pending: 'Realizando login... 🕛 ', // Mensagem enquanto a Promise está pendente
-          success: 'Seja Bem-Vindo(a)! 😃 ', // Mensagem quando a Promise é resolvida com sucesso
-          position: 'top-center',
-          autoClose: 3000,
-        }
-      );
-  
-      // Restante do seu código após o login bem-sucedido
-      await router.push('/HomePage');
-    } catch (error) {
-      // toast.promise para tratar erro
-      await toast.promise(
-        Promise.reject(), //  Promise rejeitada para representar erro
-        {
-          pending: 'Realizando login... 🕛', // Mensagem enquanto a Promise está pendente
-          error: `Erro durante a autenticação: ${error.message} 😔`, 
-          position: 'top-center',
-          autoClose: 3000,
-        }
-      )
-    }
-  
-      console.error('Erro durante a autenticação:', error.message);
-    }
-  };
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Copyright(props) {
   return (
@@ -114,9 +52,8 @@ const validationSchema = yup.object().shape({
 
 const defaultTheme = createTheme();
 
-
-
 const Login = () => {
+  const router = useRouter();
   const {
     handleSubmit: handleSubmitForm,
     control,
@@ -127,6 +64,65 @@ const Login = () => {
 
   
 
+  const onSend = async (data) => {
+    // Verifique se todos os campos estão vazios
+    if (!data.password && !data.email) {
+      // Exibir uma mensagem de erro ou feedback ao usuário
+      alert("Preencha os dados para realizar o login");
+    } else {
+      // Executar ação de envio do formulário aqui
+      const formData = {
+        password: data.password,
+        email: data.email,
+      };
+      console.log("Request Data:", formData);
+      try {
+        const response = await fetch(
+          "https://apifinances.onrender.com/sessions",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+            credentials: "include",
+          }
+        );
+
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          throw new Error(`Erro ao autenticar: ${errorMessage}`);
+        }
+
+        await toast.promise(
+          Promise.resolve(), //  Promise resolvida para representar sucesso
+          {
+            pending: "Realizando login... 🕛 ", // Mensagem enquanto a Promise está pendente
+            success: "Seja Bem-Vindo(a)! 😃 ", // Mensagem quando a Promise é resolvida com sucesso
+            position: "top-center",
+            autoClose: 3000,
+          }
+        );
+
+        // Restante do seu código após o login bem-sucedido
+        await router.push("/HomePage");
+      } catch (error) {
+        // toast.promise para tratar erro
+        await toast.promise(
+          Promise.reject(), //  Promise rejeitada para representar erro
+          {
+            pending: "Realizando login... 🕛", // Mensagem enquanto a Promise está pendente
+            error: `Erro durante a autenticação: ${error.message} 😔`,
+            position: "top-center",
+            autoClose: 3000,
+          }
+        );
+      }
+
+      console.error("Erro durante a autenticação:", error.message);
+    }
+  };
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
 
@@ -134,12 +130,10 @@ const Login = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh", minHeight: 400 }}>
-      <ToastContainer  />
+        <ToastContainer />
         <CssBaseline />
         <Grid
           item
@@ -287,4 +281,4 @@ const Login = () => {
   );
 };
 
-export default Login
+export default Login;
