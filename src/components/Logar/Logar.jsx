@@ -52,7 +52,7 @@ const onSend = async (data) => {
       }
 
       toast.success('Login bem-sucedido!', {
-        position: toast.POSITION.TOP_CENTER,
+        position: 'top-center',
         autoClose: 3000, // Tempo em milissegundos para fechar automaticamente
       });
       
