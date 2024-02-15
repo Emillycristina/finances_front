@@ -102,6 +102,7 @@ const Cadastrar = () => {
         email: data.email,
        
       };
+      console.log(formData);
      
       const response = await fetch('https://apifinances.onrender.com/users', {
         method: 'POST',
