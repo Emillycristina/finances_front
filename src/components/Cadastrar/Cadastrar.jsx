@@ -84,7 +84,7 @@ const Cadastrar = () => {
   const onSubmit = async (data) => {
 
     try {
-      const isValid = await handleSubmitForm(data =>{})();
+      const isValid = await handleSubmitForm(data =>{})(data);
 
       if (!isValid) {
         setErrorMessage("Preencha todos os campos corretamente!");
@@ -182,7 +182,10 @@ const Cadastrar = () => {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmitForm(onSubmit)}
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmitForm(onSubmit)();
+              }}
               sx={{ mt: 1 }}
             >
             <Controller
