@@ -51,13 +51,11 @@ const onSend = async (data) => {
         throw new Error(`Erro ao autenticar: ${errorMessage}`);
       }
 
-      
-      const responseData = await response.json();
-      console.log('Usuário autenticado:', responseData);
       toast.success('Login bem-sucedido!', {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000, // Tempo em milissegundos para fechar automaticamente
       });
+      
       return history.push('/HomePage'); 
 
       
@@ -118,7 +116,7 @@ const Login = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh", minHeight: 400 }}>
-      <ToastContainer />
+      <ToastContainer  />
         <CssBaseline />
         <Grid
           item
