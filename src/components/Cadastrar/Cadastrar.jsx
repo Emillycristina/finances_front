@@ -86,8 +86,11 @@ const Cadastrar = () => {
     try {
       const isValid = await handleSubmitForm(data =>{})(data);
 
-      if (!isValid) {
-        setErrorMessage("Preencha todos os campos corretamente!");
+      if (!isValid ) {
+        toast.error("Preencha todos os campos corretamente!", {
+          position: "top-center",
+          autoClose: 5000,
+        });
         return;
       } 
       
@@ -138,7 +141,7 @@ const Cadastrar = () => {
       );
      
       console.error('Erro durante a requisição:', error);
-      setErrorMessage("Erro ao enviar dados");
+      console.log("Erro ao enviar dados");
     }
   }
 
@@ -241,7 +244,7 @@ const Cadastrar = () => {
                 type={passwordVisible ? "text" : "password"}
                 autoComplete="current-password"
                 error={!!errors.name}
-                helperText={errors.name ? errors.name.message : ""}
+                helperText={errors.password ? errors.password.message : ""}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
