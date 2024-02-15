@@ -20,6 +20,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const onSend = async (data) => {
   // Verifique se todos os campos estão vazios
@@ -49,18 +51,22 @@ const onSend = async (data) => {
         throw new Error(`Erro ao autenticar: ${errorMessage}`);
       }
 
-      // A autenticação foi bem-sucedida - pode manipular a resposta aqui
+      
       const responseData = await response.json();
       console.log('Usuário autenticado:', responseData);
+      toast.success('Login bem-sucedido!', {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000, // Tempo em milissegundos para fechar automaticamente
+      });
+      return history.push('/HomePage'); 
 
       
-      history.push('/HomePage'); 
+
+      
+      
 
     } catch (error) {
-      
-      console.error('Response status:', response.status);
-      console.error('Response message:', response.statusText);
-      console.error('Erro durante a autenticação:', error.message);
+       console.error('Erro durante a autenticação:', error.message);
     }
   }
 };
@@ -112,6 +118,7 @@ const Login = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh", minHeight: 400 }}>
+      <ToastContainer />
         <CssBaseline />
         <Grid
           item
