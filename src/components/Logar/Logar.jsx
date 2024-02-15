@@ -26,7 +26,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 
+
 const onSend = async (data) => {
+  const router = useRouter();
   
   // Verifique se todos os campos estão vazios
   if (!data.password && !data.email) {
@@ -66,7 +68,7 @@ const onSend = async (data) => {
       );
   
       // Restante do seu código após o login bem-sucedido
-      handleNavigate()
+      await router.push('/HomePage');
     } catch (error) {
       // toast.promise para tratar erro
       await toast.promise(
@@ -112,9 +114,7 @@ const validationSchema = yup.object().shape({
 
 const defaultTheme = createTheme();
 
-const handleNavigate = () => {
-  router.push('/HomePage');
-};
+
 
 const Login = () => {
   const {
@@ -125,13 +125,16 @@ const Login = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  const router = useRouter();
+  
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
+
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>
