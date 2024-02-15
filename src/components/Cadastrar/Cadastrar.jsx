@@ -189,7 +189,7 @@ const Cadastrar = () => {
               noValidate
               onSubmit={(e) => {
                 e.preventDefault();
-                handleSubmitForm(onSubmit)();
+                handleSubmitForm(onSubmit);
               }}
               sx={{ mt: 1 }}
             >
