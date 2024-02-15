@@ -62,7 +62,7 @@ const onSend = async (data) => {
       );
   
       // Restante do seu código após o login bem-sucedido
-      return history.push('/HomePage');
+     history.push('/HomePage');
     } catch (error) {
       // toast.promise para tratar erro
       await toast.promise(
