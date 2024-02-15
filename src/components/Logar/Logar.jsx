@@ -73,7 +73,8 @@ const onSend = async (data) => {
           position: 'top-center',
           autoClose: 3000,
         }
-      );
+      )
+    }
   
       console.error('Erro durante a autenticação:', error.message);
     }
@@ -274,4 +275,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Login
