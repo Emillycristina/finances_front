@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from 'next/router';
 import React, { useState } from "react";
 import Link from "@mui/material/Link";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
@@ -23,7 +24,10 @@ import * as yup from "yup";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
+
 const onSend = async (data) => {
+  
   // Verifique se todos os campos estão vazios
   if (!data.password && !data.email) {
     // Exibir uma mensagem de erro ou feedback ao usuário
@@ -62,7 +66,7 @@ const onSend = async (data) => {
       );
   
       // Restante do seu código após o login bem-sucedido
-     history.push('/HomePage');
+      handleNavigate()
     } catch (error) {
       // toast.promise para tratar erro
       await toast.promise(
@@ -108,6 +112,10 @@ const validationSchema = yup.object().shape({
 
 const defaultTheme = createTheme();
 
+const handleNavigate = () => {
+  router.push('/HomePage');
+};
+
 const Login = () => {
   const {
     handleSubmit: handleSubmitForm,
@@ -117,6 +125,7 @@ const Login = () => {
     resolver: yupResolver(validationSchema),
   });
 
+  const router = useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
 
