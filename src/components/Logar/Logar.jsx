@@ -62,7 +62,12 @@ const Login = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [password, setPassword] = useState("");
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   const onSend = async (data) => {
     // Verifique se todos os campos estão vazios
@@ -123,12 +128,7 @@ const Login = () => {
     }
   };
 
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [password, setPassword] = useState("");
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>
