@@ -243,7 +243,7 @@ const Cadastrar = () => {
                 id="password"
                 type={passwordVisible ? "text" : "password"}
                 autoComplete="current-password"
-                error={!!errors.name}
+                error={!!errors.password}
                 helperText={errors.password ? errors.password.message : ""}
                 InputProps={{
                   endAdornment: (
