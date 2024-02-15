@@ -107,7 +107,7 @@ const Cadastrar = () => {
         body: JSON.stringify(formData),
         credentials: 'include',
       });
-
+      console.log("Request Data:", formData);
       console.log('Status da resposta:', response.status);
 
       if (!response.ok) {
