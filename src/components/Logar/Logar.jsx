@@ -51,23 +51,33 @@ const onSend = async (data) => {
         throw new Error(`Erro ao autenticar: ${errorMessage}`);
       }
 
-      toast.success('Login bem-sucedido!', {
-        position: 'top-center',
-        autoClose: 3000, // Tempo em milissegundos para fechar automaticamente
-      });
-      
-      return history.push('/HomePage'); 
-
-      
-
-      
-      
-
+      await toast.promise(
+        Promise.resolve(), //  Promise resolvida para representar sucesso
+        {
+          pending: 'Realizando login...', // Mensagem enquanto a Promise está pendente
+          success: 'Login bem-sucedido!', // Mensagem quando a Promise é resolvida com sucesso
+          position: 'top-center',
+          autoClose: 3000,
+        }
+      );
+  
+      // Restante do seu código após o login bem-sucedido
+      return history.push('/HomePage');
     } catch (error) {
-       console.error('Erro durante a autenticação:', error.message);
+      // toast.promise para tratar erro
+      await toast.promise(
+        Promise.reject(), //  Promise rejeitada para representar erro
+        {
+          pending: 'Realizando login...', // Mensagem enquanto a Promise está pendente
+          error: `Erro durante a autenticação: ${error.message}`, 
+          position: 'top-center',
+          autoClose: 3000,
+        }
+      );
+  
+      console.error('Erro durante a autenticação:', error.message);
     }
-  }
-};
+  };
 
 function Copyright(props) {
   return (
