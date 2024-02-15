@@ -18,6 +18,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import * as yup from "yup";
 
 function Copyright(props) {
@@ -112,8 +114,29 @@ const Cadastrar = () => {
         console.log(`Erro ao enviar dados: ${response.statusText}`);
       }
 
-      console.log('Usuário cadastrado com sucesso!', await response.json());
-     }catch (error) {
+      await toast.promise(
+        Promise.resolve(),
+        {
+          pending: "Realizando cadastro... 🕛 ", 
+          success: "Cadastro realizado com sucesso! 😃 ", 
+          position: "top-center",
+          autoClose: 3000,
+        }
+      );
+
+      
+    } catch (error) {
+      
+      await toast.promise(
+        Promise.reject(), 
+        {
+          pending: "Realizando cadastro... 🕛", 
+          error: `Erro durante ao realizar cadastro: ${error.message} 😔`,
+          position: "top-center",
+          autoClose: 3000,
+        }
+      );
+     
       console.error('Erro durante a requisição:', error);
       setErrorMessage("Erro ao enviar dados");
     }
@@ -122,6 +145,7 @@ const Cadastrar = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh", minHeight: 400 }}>
+        <ToastContainer />
         <CssBaseline />
         <Grid
           item
