@@ -111,6 +111,7 @@ const EmailConfirmar = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh", minHeight: 400 }}>
+        <ToastContainer />
         <CssBaseline />
         <Grid
           item
