@@ -1,4 +1,5 @@
-// Importe o useRouter do next/router
+import { getSession } from 'next-auth/react';
+import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 
 const authMiddleware = async (handler) => {
