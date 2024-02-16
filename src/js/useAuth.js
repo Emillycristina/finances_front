@@ -1,16 +1,26 @@
-import {useEffect, useState} from 'react';
 
-const useAuth = () => {
+import { getSession } from 'next-auth/react';
+import { toast } from 'react-toastify';
 
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(null);
+const authMiddleware = async (handler) => {
+  return async (req, res) => {
+    const session = await getSession({ req });
 
-    useEffect(() =>{
-       
-    setLoading(false)
-    }, [])
+    
 
-    return {user, loading}
-}
+    if (!session) {
+        
+        toast.warn('Você precisa fazer login para acessar esta página');
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      };
+    }
 
-export {useAuth};
+    return handler(req, res);
+  };
+};
+
+export default authMiddleware;

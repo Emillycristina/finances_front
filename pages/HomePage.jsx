@@ -1,8 +1,8 @@
 import React from "react";
 import NavBar from "../src/components/NavBar/NavBar";
 import Main from "../src/components/Main/Main";
-import Image from "next/image";
 import { FormProvider } from '../src/js/FormContext';
+import { authMiddleware } from '../middlewares/auth';
 
 const HomePage = () => {
   return (
@@ -27,4 +27,9 @@ const HomePage = () => {
   );
 };
 
+export const getServerSideProps = authMiddleware(async () => {
+  return {
+    props: {},
+  };
+});
 export default HomePage;
