@@ -24,7 +24,7 @@ const onSend = async (data) => {
     });
   } else {
     const formData = {
-      email: data.email,
+      destinatario: data.email,
     };
     try {
       const response = await fetch(
