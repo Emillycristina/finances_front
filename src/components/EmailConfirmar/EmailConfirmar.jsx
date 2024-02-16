@@ -21,7 +21,7 @@ import * as yup from "yup";
 
 
 
-const onSubmit = async (data) => {
+const onSend = async (data) => {
 
     
   if (!data.email) {
@@ -147,7 +147,7 @@ const EmailConfirmar = () => {
             <Box
               component="form"
               noValidate
-              onSubmit={handleSubmitForm(onSubmit)}
+              onSubmit={handleSubmitForm(onSend)}
               sx={{ mt: 1 }}
             >
             <Controller

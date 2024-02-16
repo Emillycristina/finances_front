@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Link from "@mui/material/Link";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
@@ -66,6 +67,7 @@ const schema = yup.object().shape({
 const defaultTheme = createTheme();
 
 const Cadastrar = () => {
+  const router = useRouter();
   const {
     handleSubmit: handleSubmitForm,
     control,
@@ -74,6 +76,8 @@ const Cadastrar = () => {
     resolver: yupResolver(schema),
   });
   
+  
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password, setPassword] = useState("")
 
@@ -105,7 +109,7 @@ const Cadastrar = () => {
         email: data.email,
        
       };
-      console.log(formData);
+      
      
       const response = await fetch(
         'https://apifinances.onrender.com/users', 
@@ -117,7 +121,7 @@ const Cadastrar = () => {
         body: JSON.stringify(formData),
         credentials: 'include',
       });
-      console.log("Request Data:", formData);
+      
       console.log('Status da resposta:', response.status);
 
       if (!response.ok) {
@@ -133,7 +137,7 @@ const Cadastrar = () => {
           autoClose: 3000,
         }
       );
-
+      await router.push("/Login");
       
     } catch (error) {
       
