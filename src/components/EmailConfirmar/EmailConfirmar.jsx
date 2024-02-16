@@ -13,6 +13,8 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { useForm, Controller } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
@@ -43,8 +45,26 @@ const onSend = async (data) => {
         const errorMessage = await response.text();
         throw new Error(`Erro ao enviar e-mail: ${errorMessage}`);
       }
+      await toast.promise(
+        Promise.resolve(), 
+        {
+          pending: "Enviando para seu e-mail o link para troca de senha... 🕛 ", 
+          success: "E-mail enviado com sucesso! 😃 ", 
+          position: "top-center",
+          autoClose: 3000,
+        }
+      );
+
     } catch (error) {
-      console.error("Erro ao enviar e-mail:", error.message);
+      await toast.promise(
+        Promise.reject(), 
+        {
+          pending: "Enviando para seu e-mail o link para troca de senha... 🕛", // Mensagem enquanto a Promise está pendente
+          error: `Erro ao enviar e-mail: ${error.message} 😔`,
+          position: "top-center",
+          autoClose: 3000,
+        }
+      )
     }
   }
 };
