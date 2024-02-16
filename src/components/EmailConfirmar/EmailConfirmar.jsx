@@ -16,49 +16,38 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-
-
-
-
-
 const onSend = async (data) => {
-
-    
   if (!data.email) {
-    
     setError("form", {
       type: "manual",
       message: "Preencha  o campo corretamente!",
     });
   } else {
-    
     const formData = {
-       email: data.email,
+      email: data.email,
     };
     try {
-      const response = await fetch('https://apifinances.onrender.com/sendPasswordResetEmail', {
-        method:'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        
-        },
-        body: JSON.stringify(formData),
-        credentials: 'include',
-      });
-      
+      const response = await fetch(
+        "https://apifinances.onrender.com/sendPasswordResetEmail",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+          credentials: "include",
+        }
+      );
+
       if (!response.ok) {
-        
         const errorMessage = await response.text();
         throw new Error(`Erro ao enviar e-mail: ${errorMessage}`);
       }
-      }catch (error) {
-      
-        console.error('Erro ao enviar e-mail:', error.message);
-      }
-    
-     
+    } catch (error) {
+      console.error("Erro ao enviar e-mail:", error.message);
+    }
   }
-}
+};
 
 const schema = yup.object().shape({
   email: yup
@@ -68,12 +57,7 @@ const schema = yup.object().shape({
     .test("format", "O e-mail deve ser no formato padrão", (value) => {
       return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value);
     }),
- 
-  
 });
-
-
-
 
 function Copyright(props) {
   return (
@@ -93,7 +77,6 @@ function Copyright(props) {
   );
 }
 
-
 const defaultTheme = createTheme();
 
 const EmailConfirmar = () => {
@@ -104,10 +87,7 @@ const EmailConfirmar = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  
 
-  
-  
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh", minHeight: 400 }}>
@@ -141,7 +121,7 @@ const EmailConfirmar = () => {
           >
             <Image src={Logo} alt="logo" width={250} height={250} />
 
-            <Typography  sx={{ color: "#6aa5f1" }}>
+            <Typography sx={{ color: "#6aa5f1" }}>
               Confirm your e-mail:
             </Typography>
             <Box
@@ -150,28 +130,27 @@ const EmailConfirmar = () => {
               onSubmit={handleSubmitForm(onSend)}
               sx={{ mt: 1 }}
             >
-            <Controller
+              <Controller
                 name="email"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
-            <TextField
-            {...field}
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                error={!!errors.email}
-                helperText={errors.email ? errors.email.message : ""}
-                 />
+                  <TextField
+                    {...field}
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    error={!!errors.email}
+                    helperText={errors.email ? errors.email.message : ""}
+                  />
                 )}
               />
-            
-             
+
               <Button
                 type="submit"
                 fullWidth
@@ -188,9 +167,8 @@ const EmailConfirmar = () => {
                   flexDirection: "column",
                 }}
               >
-                
                 <Grid item>
-                  <Link href="/" variant="body" sx={{textDecoration: 'none' }}>
+                  <Link href="/" variant="body" sx={{ textDecoration: "none" }}>
                     {"Have an account? Sign in"}
                   </Link>
                 </Grid>
