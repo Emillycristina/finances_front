@@ -53,9 +53,9 @@ const schema = yup.object().shape({
     .string()
     .required("O e-mail é obrigatório")
     .email("E-mail inválido")
-    /* .test("format", "O e-mail deve ser no formato padrão", (value) => {
+    .test("format", "O e-mail deve ser no formato padrão", (value) => {
       return /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value);
-    }), */,
+    }),
   password: yup
     .string()
     .min(8, "A senha deve ter pelo menos 8 caracteres")
