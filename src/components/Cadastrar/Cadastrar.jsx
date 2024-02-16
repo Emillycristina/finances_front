@@ -193,6 +193,7 @@ const Cadastrar = () => {
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSubmitForm(onSubmit);
+                console.log('funcionando!')
               }}
               sx={{ mt: 1 }}
             >
