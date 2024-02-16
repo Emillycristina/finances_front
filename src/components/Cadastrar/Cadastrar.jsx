@@ -75,6 +75,7 @@ const Cadastrar = () => {
   });
   
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [password, setPassword] = useState("")
 
 
   const togglePasswordVisibility = () => {
@@ -245,6 +246,7 @@ const Cadastrar = () => {
                 name="password"
                 label="Password"
                 id="password"
+                value={password}
                 type={passwordVisible ? "text" : "password"}
                 autoComplete="current-password"
                 error={!!errors.password}
