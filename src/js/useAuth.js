@@ -8,7 +8,15 @@ const authMiddleware = async (handler) => {
 
     if (!session) {
       
-      toast.warn('Você precisa fazer login para acessar esta página');
+        toast.warn('Você precisa fazer login para acessar esta página', {
+            position: 'top-center',
+            autoClose: 3000, // Fechar automaticamente após 3 segundos
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme:'colored'
+          });
 
       
       const router = useRouter();

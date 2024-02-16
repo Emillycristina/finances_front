@@ -2,7 +2,7 @@ import React from "react";
 import NavBar from "../src/components/NavBar/NavBar";
 import Main from "../src/components/Main/Main";
 import { FormProvider } from '../src/js/FormContext';
-import { authMiddleware } from '../middlewares/auth';
+import { authMiddleware } from '../src/js/useAuth';
 
 const HomePage = () => {
   return (
