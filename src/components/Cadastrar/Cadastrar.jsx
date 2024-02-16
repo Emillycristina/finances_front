@@ -192,11 +192,7 @@ const Cadastrar = () => {
             <Box
               component="form"
               noValidate
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSubmitForm(onSend);
-                
-              }}
+              onSubmit={handleSubmitForm(onSend)}
               sx={{ mt: 1 }}
             >
             <Controller
