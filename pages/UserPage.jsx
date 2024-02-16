@@ -2,6 +2,7 @@ import { Container } from '@mui/material'
 import React from 'react'
 import NavBar from '../src/components/NavBar/NavBar'
 import { FormUser } from '../src/components/FormUser/FormUser'
+import { authMiddleware } from '../src/js/useAuth';
 
 const UserPage = () => {
   return (
@@ -24,5 +25,11 @@ const UserPage = () => {
     </>
   )
 }
+
+export const getServerSideProps = authMiddleware(async () => {
+  return {
+    props: {},
+  };
+});
 
 export default UserPage

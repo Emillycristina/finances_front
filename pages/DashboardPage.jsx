@@ -3,7 +3,7 @@ import NavBar from '../src/components/NavBar/NavBar';
 import Dashboard from '../src/components/Dashboard/Dashboard';
 import Header from '../src/components/Header/Header';
 import { FormProvider } from '../src/js/FormContext';
-import { authMiddleware } from '../middlewares/auth';
+import { authMiddleware } from '../src/js/useAuth';
 
 const DashboardPage = () => {
 
