@@ -85,7 +85,7 @@ const Cadastrar = () => {
     console.log('Dados do formulário:', data);
 
     try {
-      /* const isValid = await handleSubmitForm();
+       const isValid = await handleSubmitForm();
       console.log('Após a execução de handleSubmitForm');
 
       if (!isValid ) {
@@ -95,7 +95,7 @@ const Cadastrar = () => {
           theme: "colored",
         });
         return;
-      }  */
+      }  
       
       console.log('Formulário válido');
       const formData = {
