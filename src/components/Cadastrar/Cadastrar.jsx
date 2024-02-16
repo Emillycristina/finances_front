@@ -199,6 +199,7 @@ const Cadastrar = () => {
             <Controller
                 name="name"
                 control={control}
+                defaultValue=""
                 render={({ field }) => (
              <TextField
              {...field}
@@ -218,6 +219,7 @@ const Cadastrar = () => {
             <Controller
               name="email"
               control={control}
+              defaultValue=""
               render={({ field }) => (
               <TextField
               {...field}
@@ -237,6 +239,7 @@ const Cadastrar = () => {
               <Controller
               name="password"
               control={control}
+              defaultValue=""
               render={({ field }) => (
               <TextField
               {...field}
