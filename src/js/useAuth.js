@@ -13,7 +13,7 @@ const authMiddleware = async (handler) => {
         toast.warn('Você precisa fazer login para acessar esta página');
       return {
         redirect: {
-          destination: '/login',
+          destination: '/Login',
           permanent: false,
         },
       };
