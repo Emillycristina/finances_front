@@ -134,7 +134,7 @@ const Cadastrar = () => {
           pending: "Realizando cadastro... 🕛 ", 
           success: "Cadastro realizado com sucesso! 😃 ", 
           position: "top-center",
-          autoClose: 3000,
+          autoClose: 5000,
         }
       );
       await router.push("/Login");
@@ -147,7 +147,7 @@ const Cadastrar = () => {
           pending: "Realizando cadastro... 🕛", 
           error: `Erro durante ao realizar cadastro: ${error.message} 😔`,
           position: "top-center",
-          autoClose: 3000,
+          autoClose: 5000,
         }
       );
      

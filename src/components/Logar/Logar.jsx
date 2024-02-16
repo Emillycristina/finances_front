@@ -105,7 +105,7 @@ const Login = () => {
             pending: "Realizando login... 🕛 ", // Mensagem enquanto a Promise está pendente
             success: "Seja Bem-Vindo(a)! 😃 ", // Mensagem quando a Promise é resolvida com sucesso
             position: "top-center",
-            autoClose: 3000,
+            autoClose: 5000,
           }
         );
 
@@ -119,7 +119,7 @@ const Login = () => {
             pending: "Realizando login... 🕛", // Mensagem enquanto a Promise está pendente
             error: `Erro durante a autenticação: ${error.message} 😔`,
             position: "top-center",
-            autoClose: 3000,
+            autoClose: 5000,
           }
         );
       }

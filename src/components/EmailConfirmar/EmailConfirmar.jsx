@@ -51,7 +51,7 @@ const onSend = async (data) => {
           pending: "Enviando para seu e-mail o link para troca de senha... 🕛 ", 
           success: "E-mail enviado com sucesso! 😃 ", 
           position: "top-center",
-          autoClose: 3000,
+          autoClose: 5000,
         }
       );
 
@@ -62,7 +62,7 @@ const onSend = async (data) => {
           pending: "Enviando para seu e-mail o link para troca de senha... 🕛", // Mensagem enquanto a Promise está pendente
           error: `Erro ao enviar e-mail: ${error.message} 😔`,
           position: "top-center",
-          autoClose: 3000,
+          autoClose: 5000,
         }
       )
     }

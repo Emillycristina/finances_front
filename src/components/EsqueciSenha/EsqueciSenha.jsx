@@ -16,6 +16,8 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import * as yup from "yup";
 
 const validationSchema = yup.object().shape({
@@ -90,8 +92,26 @@ const onSubmit = async (data) => {
         const errorMessage = await response.text();
         throw new Error(`Erro ao salvar nova senha: ${errorMessage}`);
       }
+      await toast.promise(
+        Promise.resolve(), 
+        {
+          pending: "Substituindo a senha anterior... 🕛 ", 
+          success: "Senha alterada com sucesso! 😃 ", 
+          position: "top-center",
+          autoClose: 5000,
+        }
+      );
+
     } catch (error) {
-      console.error("Erro ao salvar nova senha", error.message);
+      await toast.promise(
+        Promise.reject(), 
+        {
+          pending: "Substituindo a senha anterior... 🕛", 
+          error: `Erro durante ao alterar senha: ${error.message} 😔`,
+          position: "top-center",
+          autoClose: 5000,
+        }
+      )
     }
   }
 };
@@ -124,6 +144,7 @@ const EsqueciSenha = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh", minHeight: 400 }}>
+        <ToastContainer/>
         <CssBaseline />
         <Grid
           item
