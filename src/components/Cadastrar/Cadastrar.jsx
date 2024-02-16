@@ -263,8 +263,10 @@ const Cadastrar = () => {
                     </InputAdornment>
                   ),
                 }}
-                value={field.value}  
-                onChange={(e) => field.onChange(e.target.value)}
+                onChange={(e) => {
+                  field.onChange(e);
+                  setPassword(e.target.value);
+                }}
                 />
                )}
               />
