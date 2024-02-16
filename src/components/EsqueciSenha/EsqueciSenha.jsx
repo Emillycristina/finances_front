@@ -2,7 +2,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import Link from "@mui/material/Link";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-
+import { useRouter } from "next/router";
 import Logo from "../../assets/Finances.png";
 
 import Button from "@mui/material/Button";
@@ -60,65 +60,11 @@ function Copyright(props) {
   );
 }
 
-const onSubmit = async (data) => {
-  
-  if (!data.password2 && !data.password1 && data.password1 !== data.password2) {
-    
-    setError("form", {
-      type: "manual",
-      message: "Preencha os campos corretamente!",
-    });
-  } else {
-    
-    const formData = {
-      password2: data.password2,
-      email: data.email
-    };
-
-    try {
-      const response = await fetch(
-        "https://apifinances.onrender.com/users/updateSenha",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-          credentials: 'include',
-        }
-      );
-
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(`Erro ao salvar nova senha: ${errorMessage}`);
-      }
-      await toast.promise(
-        Promise.resolve(), 
-        {
-          pending: "Substituindo a senha anterior... 🕛 ", 
-          success: "Senha alterada com sucesso! 😃 ", 
-          position: "top-center",
-          autoClose: 5000,
-        }
-      );
-
-    } catch (error) {
-      await toast.promise(
-        Promise.reject(), 
-        {
-          pending: "Substituindo a senha anterior... 🕛", 
-          error: `Erro durante ao alterar senha: ${error.message} 😔`,
-          position: "top-center",
-          autoClose: 5000,
-        }
-      )
-    }
-  }
-};
 
 const defaultTheme = createTheme();
 
 const EsqueciSenha = () => {
+  const router = useRouter();
   const {
     handleSubmit: handleSubmitForm,
     control,
@@ -140,6 +86,64 @@ const EsqueciSenha = () => {
   const togglePasswordVisibility2 = () => {
     setPasswordVisible2(!passwordVisible2);
   };
+
+  const onSubmit = async (data) => {
+  
+    if (!data.password2 && !data.password1 && data.password1 !== data.password2) {
+      
+      setError("form", {
+        type: "manual",
+        message: "Preencha os campos corretamente!",
+      });
+    } else {
+      
+      const formData = {
+        password2: data.password2,
+        email: data.email
+      };
+  
+      try {
+        const response = await fetch(
+          "https://apifinances.onrender.com/users/updateSenha",
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+            credentials: 'include',
+          }
+        );
+  
+        if (!response.ok) {
+          const errorMessage = await response.text();
+          throw new Error(`Erro ao salvar nova senha: ${errorMessage}`);
+        }
+        await toast.promise(
+          Promise.resolve(), 
+          {
+            pending: "Substituindo a senha anterior... 🕛 ", 
+            success: "Senha alterada com sucesso! 😃 ", 
+            position: "top-center",
+            autoClose: 5000,
+          }
+        );
+        await router.push("/Login");
+      } catch (error) {
+        await toast.promise(
+          Promise.reject(), 
+          {
+            pending: "Substituindo a senha anterior... 🕛", 
+            error: `Erro durante ao alterar senha: ${error.message} 😔`,
+            position: "top-center",
+            autoClose: 5000,
+          }
+        )
+      }
+    }
+  };
+  
+
 
   return (
     <ThemeProvider theme={defaultTheme}>

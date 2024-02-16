@@ -109,7 +109,7 @@ const Login = () => {
           }
         );
 
-        // Restante do seu código após o login bem-sucedido
+        
         await router.push("/HomePage");
       } catch (error) {
         // toast.promise para tratar erro
