@@ -82,7 +82,7 @@ const Cadastrar = () => {
     setPasswordVisible(!passwordVisible);
   };
 
-  const onSubmit = async (data) => {
+  const onSend = async (data) => {
     console.log('Dados do formulário:', data);
 
     try {
@@ -192,7 +192,7 @@ const Cadastrar = () => {
               noValidate
               onSubmit={(e) => {
                 e.preventDefault();
-                handleSubmitForm(onSubmit);
+                handleSubmitForm(onSend);
                 console.log('funcionando!')
               }}
               sx={{ mt: 1 }}
