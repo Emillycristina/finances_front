@@ -23,6 +23,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import authService from '../../Services/useAuth';
 
 function Copyright(props) {
   return (
@@ -98,12 +99,17 @@ const Login = () => {
           const errorMessage = await response.text();
           throw new Error(`Erro ao autenticar: ${errorMessage}`);
         }
+        
+        const data = await response.json();
+        const { token, id } = data;
 
+       
+        authService.setAuthData(token, id);
         await toast.promise(
-          Promise.resolve(), //  Promise resolvida para representar sucesso
+          Promise.resolve(), 
           {
-            pending: "Realizando login... 🕛 ", // Mensagem enquanto a Promise está pendente
-            success: "Seja Bem-Vindo(a)! 😃 ", // Mensagem quando a Promise é resolvida com sucesso
+            pending: "Realizando login... 🕛 ", 
+            success: "Seja Bem-Vindo(a)! 😃 ", 
             position: "top-center",
             autoClose: 5000,
           }
