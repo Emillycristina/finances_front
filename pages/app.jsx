@@ -6,9 +6,9 @@ import UserPage from './UserPage';
 import authService from '../src/Services/authService'; 
 
 // Definição do componente PrivateRoute
-const PrivateRoute = ({ element: Component }) => {
-  return authService.isAuthenticated() ? Component : <Navigate to="/Login" />;
-};
+const PrivateRoute = ({ element: Component, ...rest }) => {
+    return authService.isAuthenticated() ? <Component {...rest} /> : <Navigate to="/Login" />;
+  };
 
 const App = () => {
   return (
