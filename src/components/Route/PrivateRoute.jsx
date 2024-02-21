@@ -1,6 +1,7 @@
 
 import { Navigate} from 'react-router-dom';
 import { toast } from 'react-toastify';
+import React from 'react';
 
 const PrivateRoute = ({ element, authenticated, redirectTo = '/Login' }) => {
   
