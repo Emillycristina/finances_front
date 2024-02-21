@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import NavBar from "../src/components/NavBar/NavBar";
 import Dashboard from "../src/components/Dashboard/Dashboard";
 import Header from "../src/components/Header/Header";
 import { FormProvider } from "../src/Services/FormContext";
-import { authMiddleware } from "./api/authMiddleware";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -30,4 +29,4 @@ const DashboardPage = () => {
   );
 };
 
-export default authMiddleware(DashboardPage);
+export default DashboardPage;

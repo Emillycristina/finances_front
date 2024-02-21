@@ -2,7 +2,6 @@ import React from "react";
 import NavBar from "../src/components/NavBar/NavBar";
 import Main from "../src/components/Main/Main";
 import { FormProvider } from "../src/Services/FormContext";
-import { authMiddleware } from "./api/authMiddleware";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -28,4 +27,4 @@ const HomePage = () => {
   );
 };
 
-export default authMiddleware(HomePage);
+export default HomePage;

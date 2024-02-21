@@ -12,13 +12,14 @@ import {BsGraphUpArrow } from "react-icons/bs";
 import {  BiSolidUserCircle } from "react-icons/bi";
 import { GiPiggyBank } from "react-icons/gi";
 import { useRouter } from "next/router";
+import authService from "../../Services/useAuth";
 
 const NavBar = () => {
  
   const router = useRouter();
 
   const handleLogout = () => {
-    
+    authService.clearAuthentication();
     router.push("/");
   };
   

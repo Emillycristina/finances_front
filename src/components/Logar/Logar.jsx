@@ -23,7 +23,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import authService from '../../Services/useAuth';
+import authService from "../../Services/useAuth";
+
 
 function Copyright(props) {
   return (
@@ -103,8 +104,10 @@ const Login = () => {
         const data = await response.json();
         const { token, id } = data;
 
+        authService.setToken(token, id);
+
        
-        authService.setAuthData(token, id);
+        
         await toast.promise(
           Promise.resolve(), 
           {
