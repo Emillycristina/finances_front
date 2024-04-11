@@ -2,8 +2,6 @@ import {
   FormControl,
   Grid,
   Card,
-  InputAdornment,
-  Input,
   TextField,
   Button,
   FormGroup,
@@ -14,26 +12,32 @@ import React, { useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useFormContext } from '../../Services/FormContext';
+import authService from "../../Services/useAuth";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 
 const Form = () => {
-  const { onAddRow } = useFormContext();
+  const userId = authService.getUserIdFromCookies();
+
+
+
 
   const [values, setValues] = useState({
     descricao: "",
     valor: 0,
     tipo: "",
     data: null,
+    userId: userId,
   });
 
-  const handleFlagClick = (flag) => {
-    setValues({
-      ...values,
-      tipo: flag,
-    });
+  
+
+  const handleFlagClick = (event) => {
+    const selectedType = event.target.value;
+    setValues({ ...values, tipo: selectedType });
+    
   };
+
 
   const handleDateChange = (date) => {
     const formattedDate = dayjs(date).locale("pt-br").format("DD/MM/YYYY");
@@ -45,36 +49,43 @@ const Form = () => {
   }
 
   const handleSubmit = async () => {
+
+ 
+  const token = authService.getTokenFromCookies();
+
+  // Log dos valores de userId e token
+  console.log('userId:', userId);
+  console.log('token:', token);
+
     try {
-      // Faça a chamada à API para enviar os dados
-      const response = await fetch('api', {
+      
+      const response = await fetch("https://apifinances.onrender.com/moviments", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization' : `Bearer ${authService.getTokenFromCookies()}`
         },
         body: JSON.stringify(values),
       });
+     
 
       if (!response.ok) {
-        throw new Error('Erro ao enviar dados para a API');
+        const errorMessage = await response.text()
+        throw new Error(errorMessage || 'Erro ao enviar dados para a API');
       }
-
-      // Se a chamada à API for bem-sucedida, adicione a linha à tabela
-      const newRow = await response.json();
-      onAddRow(newRow);
-
-      // Limpa os campos do formulário
       setValues({
         descricao: "",
         valor: 0,
         tipo: "",
         data: null,
+        userId: userId,
       });
     } catch (error) {
       console.error('Erro ao enviar dados para a API:', error.message);
-      // Trate o erro conforme necessário (exibindo mensagem de erro, etc.)
+      
     }
-  };;
+  };
+
 
   return (
     <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginLeft: '5px'}}>
@@ -133,8 +144,9 @@ const Form = () => {
               <Grid item>
                 <FormGroup>
                   <FormControlLabel
-                    onClick={() => handleFlagClick("entrada")}
-                    control={<Checkbox defaultChecked />}
+                    
+                    value="entrada"
+                    control={<Checkbox checked={values.tipo === 'entrada'} onChange={handleFlagClick} />}
                     label="Entrada"
                   />
                 </FormGroup>
@@ -143,8 +155,8 @@ const Form = () => {
               <Grid item>
                 <FormGroup>
                   <FormControlLabel
-                    onClick={() => handleFlagClick("saida")}
-                    control={<Checkbox defaultChecked />}
+                    value="saida"
+                    control={<Checkbox checked={values.tipo === 'saida'} onChange={handleFlagClick} />}
                     label="Saída"
                   />
                 </FormGroup>
@@ -160,6 +172,7 @@ const Form = () => {
                 variant="contained"
                 sx={{ height: "35px" }}
                 onClick={handleSubmit}
+                
               >
                 Adicionar{" "}
               </Button>

@@ -1,3 +1,4 @@
+"use client"
 import {
   Box,
   TextField,
@@ -10,18 +11,36 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdAddAPhoto } from "react-icons/md";
+import { ToastContainer,toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useForm } from "react-hook-form";
 
 
 
 export const FormUser = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+ 
   const [cep, setCep] = useState("");
-  const [endereco, setEndereco] = useState({
-    logradouro: "",
-    bairro: "",
-    cidade: "",
-    uf: "",
+  const isClient = typeof window === 'object';
+  const [endereco, setEndereco] = useState(() => {
+    if (isClient) {
+      const enderecoSalvo = sessionStorage.getItem('endereco');
+      return enderecoSalvo ? JSON.parse(enderecoSalvo) : {
+        logradouro: "",
+        bairro: "",
+        cidade: "",
+        uf: "",
+      };
+    } else {
+      return {
+        logradouro: "",
+        bairro: "",
+        cidade: "",
+        uf: "",
+      };
+    }
   });
 
   const [imagemPerfil, setImagemPerfil] = useState(null);
@@ -58,15 +77,21 @@ export const FormUser = () => {
 
   const handleImagemPerfilChange = (e) => {
     const arquivo = e.target.files[0];
-
+  
     if (arquivo) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagemPerfil(e.target.result);
-      };
-      reader.readAsDataURL(arquivo);
+      setImagemPerfil(arquivo);
     }
   };
+
+  useEffect(() => {
+    if (isClient){
+    sessionStorage.setItem("cep", cep);
+    sessionStorage.setItem('endereco', JSON.stringify(endereco));
+    sessionStorage.setItem("imagemPerfil", imagemPerfil);
+    sessionStorage.setItem("estadoSelecionado", estadoSelecionado);
+  }
+   }, [cep, imagemPerfil, estadoSelecionado, endereco, isClient])
+
 
   const handleCepChange = (e) => {
     const cepNovo = e.target.value;
@@ -91,26 +116,96 @@ export const FormUser = () => {
      setCep(cepNovo)
   };
 
+
+  const onSend = async (data) => {
+    console.log(data);
+
+    if (!data || !data.nome || !data.telefone || !cep || !endereco.logradouro || !endereco.bairro || !endereco.cidade || !estadoSelecionado) {
+     
+      toast.error('Preencha todos os campos obrigatórios', {
+        position: 'top-center',
+        autoClose: 3000,
+      });
+      return;
+    }
+     const formData = new FormData();
+
+     if (imagemPerfil) {
+    formData.append('imagemPerfil', imagemPerfil,'imagemPefil.jpg')
+  }
+
+
+  formData.append('nome', data.nome);
+  formData.append('telefone', data.telefone);
+  formData.append('cep', cep);
+  formData.append('logradouro', endereco.logradouro);
+  formData.append('bairro', endereco.bairro);
+  formData.append('cidade', endereco.cidade);
+  formData.append('uf', estadoSelecionado);
+
+ try{
+
+    const response = await fetch('https://apifinances.onrender.com/adddress/',
+    {
+      method: 'POST',
+      body: formData,
+      credentials: 'include',
+    })
+    
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`Erro ao enviar dados: ${errorMessage}`);
+    }
+
+    await toast.promise(
+      Promise.resolve(),
+      {
+        pending: 'Enviando dados... 🕛 ',
+        success: 'Dados enviados com sucesso! 😃 ',
+        position: 'top-center',
+        autoClose: 3000,
+      }
+    );
+
+    
+  } catch (error) {
+    await toast.promise(
+      Promise.reject(),
+      {
+        pending: 'Enviando dados... 🕛',
+        error: `Erro durante o envio de dados: ${error.message} 😔`,
+        position: 'top-center',
+        autoClose: 3000,
+      }
+    );
+  }
+  }
+
   return (
     <Box
       component="form"
+      onSubmit={handleSubmit(onSend)}
       sx={{
         "& .MuiTextField-root": { m: 1, width: "25ch" },
         marginTop: "30px",
         marginLeft:"50px",
+        
        
       }}
     >
+     <ToastContainer />
       <Avatar
         alt="Usuário"
-        src={imagemPerfil}
+        src={imagemPerfil ? URL.createObjectURL(imagemPerfil) : ''}
         sx={{
           width: "10rem",
           height: "10rem",
           position: "relative",
           zIndex: 0,
+          bottom: "5px"
         }}
       >
+        </Avatar>
         <Input
           type="file"
           accept="image/*"
@@ -122,8 +217,7 @@ export const FormUser = () => {
           <IconButton
             sx={{
               position: "absolute",
-              bottom: "8px",
-              right: "20px",
+              top: "10px",
               zIndex: "1",
               
             }}
@@ -132,7 +226,7 @@ export const FormUser = () => {
             <MdAddAPhoto />
           </IconButton>
         </label>
-      </Avatar>
+      
 
       <Box>
         <TextField
@@ -140,11 +234,22 @@ export const FormUser = () => {
           variant="outlined"
           type="text"
           size="small"
+          {...register("nome", { required: true })}
         ></TextField>
 
-        <TextField label="E-mail" variant="outlined" type="text" size="small"></TextField>
+        <TextField 
+        label="E-mail" 
+        variant="outlined" 
+        type="text" 
+        size="small"
+        {...register("email", { required: true })}></TextField>
 
-        <TextField label="Telefone" variant="outlined" type="text" size="small"></TextField>
+        <TextField 
+        label="Telefone" 
+        variant="outlined" 
+        type="text" 
+        size="small"
+        {...register("telefone", { required: true })}></TextField>
 
         <TextField label="CEP" 
         variant="outlined" 
@@ -200,7 +305,7 @@ export const FormUser = () => {
           justifyContent: "flex-start",
         }}
       >
-        <Button variant="contained" sx={{ height: "48px", marginTop: "10px" }}>
+        <Button type="submit" variant="contained"  sx={{ height: "48px", marginTop: "10px" }}>
           Salvar
         </Button>
       </Box>

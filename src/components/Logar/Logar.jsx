@@ -1,6 +1,7 @@
+
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "@mui/material/Link";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 
@@ -9,8 +10,6 @@ import Logo from "../../assets/Finances.png";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -61,7 +60,7 @@ const Login = () => {
     control,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema)
   });
 
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -72,72 +71,68 @@ const Login = () => {
   };
 
   const onSend = async (data) => {
-    // Verifique se todos os campos estão vazios
+    
     if (!data.password && !data.email) {
-      // Exibir uma mensagem de erro ou feedback ao usuário
+      
       alert("Preencha os dados para realizar o login");
     } else {
-      // Executar ação de envio do formulário aqui
+     
       const formData = {
         password: data.password,
         email: data.email,
       };
       
       try {
-        const response = await fetch(
-          "https://apifinances.onrender.com/sessions",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-            credentials: "include",
-          }
-        );
-
+        const response = await fetch("https://apifinances.onrender.com/sessions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+          credentials: "include",
+        });
+      
         if (!response.ok) {
           const errorMessage = await response.text();
           throw new Error(`Erro ao autenticar: ${errorMessage}`);
         }
-        
-        const data = await response.json();
-        const { token, id } = data;
-
-        authService.setToken(token, id);
-
-       
-        
-        await toast.promise(
-          Promise.resolve(), 
-          {
-            pending: "Realizando login... 🕛 ", 
-            success: "Seja Bem-Vindo(a)! 😃 ", 
-            position: "top-center",
-            autoClose: 5000,
-          }
-        );
-
-        
-        await router.push("/HomePage");
+      
+        const responseData = await response.json();
+        const { token, id } = responseData;
+      
+        await authService.setToken(token, id);
+      
+        if (authService.isAuthenticated()) {
+         
+          router.replace("/HomePage");
+          
+          // Exibir mensagem de boas-vindas
+          toast.success("Seja Bem-Vindo(a)! 😃", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        } else {
+          console.log("Usuário não autenticado.");
+        }
       } catch (error) {
-        // toast.promise para tratar erro
-        await toast.promise(
-          Promise.reject(), //  Promise rejeitada para representar erro
-          {
-            pending: "Realizando login... 🕛", // Mensagem enquanto a Promise está pendente
-            error: `Erro durante a autenticação: ${error.message} 😔`,
-            position: "top-center",
-            autoClose: 5000,
-          }
-        );
+        toast.error(`Erro durante a autenticação: ${error.message} 😔`, {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
-
-      console.error("Erro durante a autenticação:", error.message);
     }
-  };
-
+  }      
   
+  useEffect(() => {
+    if (authService.isAuthenticated()) {
+      console.log("Usuário autenticado. Iniciando redirecionamento...");
+      router.replace("/HomePage");
+      console.log("Redirecionamento concluído!");
+    } else {
+      console.log("Usuário não autenticado.");
+    }
+  }, []);
+
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -242,10 +237,7 @@ const Login = () => {
                 )}
               />
 
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+             
               <Button
                 type="submit"
                 fullWidth

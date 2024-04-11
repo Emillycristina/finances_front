@@ -1,34 +1,37 @@
-// authService.js
-const setCookie = (name, value, days = 7) => {
-  const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+import { parseCookies, setCookie, destroyCookie } from 'nookies';
+
+const isAuthenticated = (ctx) => {
+  const cookies = parseCookies(ctx);
+  return !!cookies.token;
 };
 
-const getCookie = (name) => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-  return null;
+const getTokenFromCookies = (ctx) => {
+  const cookies = parseCookies(ctx);
+  return cookies.token || null;
 };
 
-const isAuthenticated = () => {
-  const token = getCookie('token');
-  return token !== null;
+const getUserIdFromCookies = (ctx) => {
+  const cookies = parseCookies(ctx);
+  return cookies.userId || null;
 };
 
-// Atualizado para refletir a intenção de apenas armazenar o token
-const setToken = (token) => {
-  setCookie('token', token);
+const setToken = (ctx, token) => {
+  setCookie(ctx, 'token', token, {
+    maxAge: 30 * 24 * 60 * 60, // 30 dias em segundos
+    path: '/',
+  });
 };
 
-// Adicionado para armazenar o ID do usuário separadamente
-const setUserId = (id) => {
-  setCookie('userId', id);
+const setUserId = (ctx, id) => {
+  setCookie(ctx, 'userId', id, {
+    maxAge: 30 * 24 * 60 * 60, // 30 dias em segundos
+    path: '/',
+  });
 };
 
-const clearAuthentication = () => {
-  setCookie('token', '', -1);
-  setCookie('userId', '', -1);
+const clearAuthentication = (ctx) => {
+  destroyCookie(ctx, 'token');
+  destroyCookie(ctx, 'userId');
 };
 
 const authService = {
@@ -36,6 +39,8 @@ const authService = {
   setToken,
   setUserId,
   clearAuthentication,
+  getTokenFromCookies,
+  getUserIdFromCookies,
 };
 
 export default authService;
