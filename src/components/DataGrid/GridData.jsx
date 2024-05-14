@@ -102,79 +102,13 @@ const GridData = () => {
     setIsModalOpen(true); 
   };
 
-  const handleSave = async () => {
-    try {
-      const response = await fetch(
-        `https://apifinances.onrender.com/moviments/${editState.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-           
-          },
-          body: JSON.stringify(editState.data),
-        }
-      );
-      console.log(editState.data);
-      if (response.ok) {
-        setIsModalOpen(false);
-        
-      } else {
-        console.error("Erro ao atualizar movimento:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Erro ao enviar requisição de atualização:", error);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(
-        `https://apifinances.onrender.com/moviments/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-            userId: userId,
-          },
-        }
-      );
-      if (response.ok) {
-        setApiData(apiData.filter((item) => item.id !== id));
-      } else {
-        console.error("Erro ao excluir movimento:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Erro ao enviar requisição de exclusão:", error);
-    }
-  };
+ 
 
   const closeModal = () => {
     setIsModalOpen(false);
    
   };
 
-  const handleEditDataUpdate = (updatedData) => {
-    setApiData((prevApiData) => {
-      return prevApiData.map((item) => {
-        if (item.id === editState.id) {
-          
-          setEditState({
-            ...editState,
-            data: {
-              ...editState.data,
-              ...updatedData
-            }
-          });
-          
-          return { ...item, ...updatedData };
-        }
-        return item;
-      });
-    });
-  };
   
 
   const localeText = {
@@ -237,9 +171,7 @@ const GridData = () => {
         isOpen={isModalOpen}
         handleClose={closeModal}
         editState={editState}
-        handleSave={handleSave}
-        handleUpdate={handleEditDataUpdate}
-
+       setIsModalOpen={setIsModalOpen}
       />
     </div>
   );

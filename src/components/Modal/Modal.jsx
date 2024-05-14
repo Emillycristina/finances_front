@@ -8,7 +8,7 @@ import "dayjs/locale/pt-br";
 import dayjs from 'dayjs';
 
 
-const EditModal = ({ isOpen, handleClose, editState, handleSave, handleUpdate }) => {
+const EditModal = ({ isOpen, handleClose, editState,  handleUpdate, setIsModalOpen }) => {
   const userId = authService.getUserIdFromCookies();
   const token = authService.getTokenFromCookies();
 
@@ -87,23 +87,41 @@ const EditModal = ({ isOpen, handleClose, editState, handleSave, handleUpdate })
     const updatedFormData = { ...formData, [field]: updatedValue };
 
     setFormData(updatedFormData);
-    handleUpdate(updatedFormData);
+    
 
     console.log(updatedFormData); 
   };
   
-
-
-  const onSaveClick = () => {
-
   
-    if (formData.descricao && formData.valor && formData.tipo && formData.data) {
-      handleSave(formData);
-      handleClose();
-    } else {
-      console.error('Todos os campos devem ser preenchidos');
+  const handleSave = async () => {
+    try {
+
+     
+      const response = await fetch(
+        `https://apifinances.onrender.com/moviments/${editState.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+           
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      console.log(formData);
+      if (response.ok) {
+        setIsModalOpen(false);
+        
+      } else {
+        console.error("Erro ao atualizar movimento:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Erro ao enviar requisição de atualização:", error);
     }
   };
+
+
 
   return (
     <Modal
@@ -118,7 +136,7 @@ const EditModal = ({ isOpen, handleClose, editState, handleSave, handleUpdate })
         
           onSubmit={(e) => {
           e.preventDefault();
-          onSaveClick();
+          handleSave();
 
         }} >
           <TextField
