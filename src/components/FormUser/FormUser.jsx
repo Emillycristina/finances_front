@@ -16,32 +16,19 @@ import { MdAddAPhoto } from "react-icons/md";
 import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useForm } from "react-hook-form";
+import authService from "../../Services/useAuth";
 
 
 
 export const FormUser = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const userId = authService.getUserIdFromCookies();
+  const token = authService.getTokenFromCookies();
  
-  const [cep, setCep] = useState("");
-  const isClient = typeof window === 'object';
-  const [endereco, setEndereco] = useState(() => {
-    if (isClient) {
-      const enderecoSalvo = sessionStorage.getItem('endereco');
-      return enderecoSalvo ? JSON.parse(enderecoSalvo) : {
-        logradouro: "",
-        bairro: "",
-        cidade: "",
-        uf: "",
-      };
-    } else {
-      return {
-        logradouro: "",
-        bairro: "",
-        cidade: "",
-        uf: "",
-      };
-    }
-  });
+  const [cep, setCep ] = useState("");
+  const [userData, setUserData] = useState({});
+  const [endereco, setEndereco] = useState({});
 
   const [imagemPerfil, setImagemPerfil] = useState(null);
   const [estadoSelecionado, setEstadoSelecionado] = useState("");
@@ -84,19 +71,67 @@ export const FormUser = () => {
   };
 
   useEffect(() => {
-    if (isClient){
-    sessionStorage.setItem("cep", cep);
-    sessionStorage.setItem('endereco', JSON.stringify(endereco));
-    sessionStorage.setItem("imagemPerfil", imagemPerfil);
-    sessionStorage.setItem("estadoSelecionado", estadoSelecionado);
-  }
-   }, [cep, imagemPerfil, estadoSelecionado, endereco, isClient])
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "https://apifinances.onrender.com/address",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+              userId: userId,
+            },
+          }
+        );
+  
+        if (response.ok) {
+          const data = await response.json();
+          
+           if (data.addresses && data.addresses.length > 0) {
+            const userDataFromAPI = data.addresses[0];
+            setUserData(userDataFromAPI);
+            setEndereco({
+              logradouro: userDataFromAPI.logradouro || "",
+              bairro: userDataFromAPI.bairro || "",
+              cidade: userDataFromAPI.cidade || "",
+              uf: userDataFromAPI.uf || "",
+            });
+            if (userDataFromAPI.uf) {
+              setEstadoSelecionado(userDataFromAPI.uf.toUpperCase());
+            }
+            if (userDataFromAPI.imagemPerfil) {
+              setImagemPerfilUrl(userDataFromAPI.imagemPerfil);
+            }
+            if (userDataFromAPI.cep) {
+              setCep(userDataFromAPI.cep);
+            }
+            
+          } else {
+           
+            setUserData({}); 
+            setEndereco({}); 
+            setEstadoSelecionado(""); 
+            setImagemPerfil(null);
+          }
+        } else {
+          console.error("Erro ao buscar dados da API:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar dados da API:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
+  console.log(userData)
 
 
   const handleCepChange = (e) => {
     const cepNovo = e.target.value;
 
-    if (cepNovo.length === 8) {
+    if (cepNovo.length === 8 && !userData.cep) {
       fetch(`https://viacep.com.br/ws/${cepNovo}/json/`)
         .then((response) => response.json())
         .then((data) => {
@@ -118,7 +153,7 @@ export const FormUser = () => {
 
 
   const onSend = async (data) => {
-    console.log(data);
+    
 
     if (!data || !data.nome || !data.telefone || !cep || !endereco.logradouro || !endereco.bairro || !endereco.cidade || !estadoSelecionado) {
      
@@ -128,30 +163,41 @@ export const FormUser = () => {
       });
       return;
     }
-     const formData = new FormData();
 
-     if (imagemPerfil) {
-    formData.append('imagemPerfil', imagemPerfil,'imagemPefil.jpg')
-  }
-
-
-  formData.append('nome', data.nome);
-  formData.append('telefone', data.telefone);
-  formData.append('cep', cep);
-  formData.append('logradouro', endereco.logradouro);
-  formData.append('bairro', endereco.bairro);
-  formData.append('cidade', endereco.cidade);
-  formData.append('uf', estadoSelecionado);
-
+    console.log(cep, endereco.logradouro, endereco.bairro, endereco.cidade, estadoSelecionado)
+   
+    
+  
+  
+   
  try{
 
-    const response = await fetch('https://apifinances.onrender.com/adddress/',
+  const formData = new FormData();
+
+    formData.append('nomeCompleto', data.nome);
+    formData.append('telefone', data.telefone);
+    formData.append('email', data.email);
+    formData.append('cep', cep);
+    formData.append('logradouro', endereco.logradouro);
+    formData.append('bairro', endereco.bairro);
+    formData.append('cidade', endereco.cidade);
+    formData.append('uf', estadoSelecionado);
+    formData.append('userId', userId);
+    formData.append('file', imagemPerfil);
+
+    
+
+    const response = await fetch('https://apifinances.onrender.com/address',
     {
       method: 'POST',
+      headers: {
+      
+      'Authorization' : `Bearer ${token}`
+      },
       body: formData,
-      credentials: 'include',
     })
-    
+    console.log(formData)
+   
     if (!response.ok) {
       const errorMessage = await response.text();
       throw new Error(`Erro ao enviar dados: ${errorMessage}`);
@@ -180,6 +226,9 @@ export const FormUser = () => {
     );
   }
   }
+
+
+
 
   return (
     <Box
@@ -234,6 +283,7 @@ export const FormUser = () => {
           variant="outlined"
           type="text"
           size="small"
+         value={userData.nomeCompleto  || ""}
           {...register("nome", { required: true })}
         ></TextField>
 
@@ -242,6 +292,7 @@ export const FormUser = () => {
         variant="outlined" 
         type="text" 
         size="small"
+        value={userData.email || ""}
         {...register("email", { required: true })}></TextField>
 
         <TextField 
@@ -249,6 +300,7 @@ export const FormUser = () => {
         variant="outlined" 
         type="text" 
         size="small"
+        value={userData.telefone || ""}
         {...register("telefone", { required: true })}></TextField>
 
         <TextField label="CEP" 
@@ -256,7 +308,9 @@ export const FormUser = () => {
         value={cep}
         onChange={handleCepChange}
         type="text"
-        size="small">
+        size="small"
+        
+        >
         
         </TextField>
 
@@ -273,13 +327,13 @@ export const FormUser = () => {
         <TextField label="Bairro" 
         variant="outlined" 
         size="small"
-        value={endereco.bairro}
+        value={endereco.bairro || ""}
         type="text"></TextField>
 
         <TextField label="Cidade" 
         variant="outlined" 
         size="small"
-        value={endereco.cidade}
+        value={endereco.cidade || ""}
         type="text"></TextField>
 
         <FormControl variant="outlined" sx={{ m: 1, minWidth: 200 }}  size="small">

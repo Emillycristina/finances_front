@@ -16,8 +16,10 @@ import authService from "../../Services/useAuth";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 
+
 const Form = () => {
   const userId = authService.getUserIdFromCookies();
+  const token = authService.getTokenFromCookies();
 
 
 
@@ -40,39 +42,42 @@ const Form = () => {
 
 
   const handleDateChange = (date) => {
-    const formattedDate = dayjs(date).locale("pt-br").format("DD/MM/YYYY");
+    
+    const formattedDate = dayjs(date).format("MM/DD/YYYY");
   
-    setValues({
+    
+  setValues({
       ...values,
       data: formattedDate,
     });
   }
+  
+  
+  
 
   const handleSubmit = async () => {
 
  
-  const token = authService.getTokenFromCookies();
-
-  // Log dos valores de userId e token
-  console.log('userId:', userId);
-  console.log('token:', token);
-
-    try {
+ 
+try {
       
       const response = await fetch("https://apifinances.onrender.com/moviments", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization' : `Bearer ${authService.getTokenFromCookies()}`
+          'Authorization' : `Bearer ${token}`
         },
         body: JSON.stringify(values),
       });
-     
+      console.log(values)
 
       if (!response.ok) {
+       
         const errorMessage = await response.text()
         throw new Error(errorMessage || 'Erro ao enviar dados para a API');
+       
       }
+      
       setValues({
         descricao: "",
         valor: 0,
@@ -88,7 +93,7 @@ const Form = () => {
 
 
   return (
-    <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginLeft: '5px'}}>
+    <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginLeft: '5px',marginTop:'5px' }}>
       <Grid
         container
         spacing={1}

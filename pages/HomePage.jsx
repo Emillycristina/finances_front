@@ -6,8 +6,8 @@ import { FormProvider } from "../src/Services/FormContext";
 import AuthGuard from "../src/Services/withAuth";
 
 
-const HomePage = ({ user, token }) => {
-  console.log("Renderizando a HomePage para o usuário:", user, token);
+const HomePage = () => {
+  
   return (
     <AuthGuard>
       <FormProvider>

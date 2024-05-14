@@ -15,18 +15,21 @@ const getUserIdFromCookies = (ctx) => {
   return cookies.userId || null;
 };
 
-const setToken = (ctx, token) => {
+const setToken = (token, ctx) => {
+  
   setCookie(ctx, 'token', token, {
     maxAge: 30 * 24 * 60 * 60, // 30 dias em segundos
     path: '/',
   });
 };
 
-const setUserId = (ctx, id) => {
+const setUserId = ( id, ctx) => {
+ 
   setCookie(ctx, 'userId', id, {
     maxAge: 30 * 24 * 60 * 60, // 30 dias em segundos
     path: '/',
   });
+ 
 };
 
 const clearAuthentication = (ctx) => {

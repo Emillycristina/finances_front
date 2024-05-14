@@ -100,7 +100,11 @@ const Login = () => {
         const responseData = await response.json();
         const { token, id } = responseData;
       
-        await authService.setToken(token, id);
+        await authService.setToken(token);
+        await authService.setUserId(id);
+       
+
+        console.log(token, id)
       
         if (authService.isAuthenticated()) {
          
